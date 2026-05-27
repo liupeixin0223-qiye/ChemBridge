@@ -253,7 +253,7 @@ If your dataset contains a reference column such as `expected_reaction`, ChemBri
 
 Additional validation helpers are available under `Data/Validation_set/`, including scripts for merging and comparing experiment outputs.
 
-The published validation artifact is `Data/Validation_set/rows-1-5032/`. It intentionally keeps the original-stage, bridge-stage, final-result, failed-case, workflow-statistics, and accuracy-comparison files so that bridge and fallback traces are available for inspection.
+The validation input file `Data/Validation_set/validation_set.csv` is retained from the original SynRBL repository and is used here as a benchmark input for evaluating the ChemBridge workflow. The validation data itself should therefore be attributed to the original SynRBL project. The published validation artifact `Data/Validation_set/rows-1-5032/` contains ChemBridge-generated outputs produced from this SynRBL validation set. It intentionally keeps the original-stage, bridge-stage, final-result, failed-case, workflow-statistics, and accuracy-comparison files so that bridge and fallback traces are available for inspection.
 
 ## Attribution, Citation, and License
 
