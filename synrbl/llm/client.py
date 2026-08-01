@@ -55,6 +55,7 @@ class MoonshotLLMClient:
         generate_model: str = DEFAULT_GENERATE_MODEL,
         timeout: int = 240,
         thinking_enabled: bool = False,
+        temperature: Optional[float] = None,
     ):
         self.api_key_env = api_key_env
 
@@ -69,6 +70,7 @@ class MoonshotLLMClient:
         self.generate_model = generate_model
         self.timeout = timeout
         self.thinking_enabled = thinking_enabled
+        self.temperature = temperature
 
     def diagnose_reaction(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         user_prompt = json.dumps(payload, ensure_ascii=False)
@@ -144,7 +146,7 @@ class MoonshotLLMClient:
         }
         if not self.thinking_enabled:
             body["thinking"] = {"type": "disabled"}
-        temperature = _resolve_temperature(model, self.thinking_enabled)
+        temperature = self.temperature if self.temperature is not None else _resolve_temperature(model, self.thinking_enabled)
         if temperature is not None:
             body["temperature"] = temperature
         request = urllib.request.Request(

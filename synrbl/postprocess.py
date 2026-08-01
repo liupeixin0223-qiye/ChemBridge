@@ -57,6 +57,11 @@ class Validator:
             for i, r in enumerate(check.check_carbon_balance()):
                 reactions[i][self.carbon_balance_col] = r["carbon_balance_check"]
 
+        # 防御性默认值：当 check_carbon_balance=False 时，上游验证器可能
+        # 未设置此键（如 Validator 被独立调用），避免后续 KeyError。
+        for reaction in reactions:
+            reaction.setdefault(self.carbon_balance_col, "unknown")
+
         assert len(reactions) == len(unbalance)
         for reaction, b in zip(reactions, unbalance):
             reaction[self.unbalance_col] = b

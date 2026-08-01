@@ -97,7 +97,7 @@ class TestImputeReaction(unittest.TestCase):
         m_rule = mock.MagicMock()
         m_rule.name = "Mock Rule"
         m_mergeresult.rules = [m_rule]
-        m_merge.return_value = m_mergeresult
+        m_merge.return_value = [m_mergeresult]
 
         r = self._reac_dict(
             old_reaction,
@@ -108,7 +108,7 @@ class TestImputeReaction(unittest.TestCase):
             ["G", "H"],
         )
 
-        result, rules = impute_reaction(
+        results = impute_reaction(
             r,
             reaction_col="old_reaction",
             issue_col="issue",
@@ -117,9 +117,12 @@ class TestImputeReaction(unittest.TestCase):
         )
 
         self.assertEqual("", r["issue"])
+        self.assertEqual(1, len(results))
+        result, rules, direction = results[0]
         self.assertEqual(old_reaction + ".X", result)
         self.assertEqual(1, len(rules))
         self.assertEqual(m_rule.name, rules[0])
+        self.assertEqual("byproduct", direction)
 
     @mock.patch("synrbl.SynMCSImputer.mcs_based_method.is_carbon_balanced")
     @mock.patch("synrbl.SynMCSImputer.mcs_based_method.merge")
@@ -134,7 +137,7 @@ class TestImputeReaction(unittest.TestCase):
         m_rule = mock.MagicMock()
         m_rule.name = "Mock Rule"
         m_mergeresult.rules = [m_rule]
-        m_merge.return_value = m_mergeresult
+        m_merge.return_value = [m_mergeresult]
 
         m_cec.return_value = False
 

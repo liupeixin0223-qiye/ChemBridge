@@ -1,0 +1,2381 @@
+[
+  {
+    "id": 15,
+    "source": "bridge",
+    "has_expected": true,
+    "grade": "A",
+    "sub_type": "expected_spectator",
+    "note": "预期答案含旁观物种，Pipeline正确省略",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [
+      "O"
+    ],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "NO.COc1ccc(cc1)N1CCN(CC1)C(=O)C(CC(C)C)C1OC(C)(C)OC1=O>>CC(C)=O.COc1ccc(cc1)N1CCN(CC1)C(=O)C(CC(C)C)C(O)C(=O)NO",
+    "expected_rxn": "COc1ccc(cc1)N1CCN(CC1)C(=O)C(CC(C)C)C1OC(C)(C)OC1=O.NO.O>>COc1ccc(cc1)N1CCN(CC1)C(=O)C(CC(C)C)C(O)C(=O)NO.CC(C)=O.O"
+  },
+  {
+    "id": 16,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[C:9]([C:10]1=[CH:11][CH:12]=[CH:13][C:14](=[CH:16]1)[Cl:15])(=[O:8])[O:17][OH:18].[CH:6]1=[CH:5][CH:4]=[C:3]([O:7]1)[CH2:2][OH:1]>>[CH:6]1([O:1][CH2:2][C:3]([CH:4]=[CH:5]1)=[O:7])[OH:18].O=C(O)c1ccccc1Cl",
+    "expected_rxn": ""
+  },
+  {
+    "id": 63,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[H].[H].CCOC(=O)CC(C[N+]([O-])=O)c1cc2ccccc2o1>>O.O=C1CC(CN1)c1cc2ccccc2o1.CC(=O)O",
+    "expected_rxn": "CCOC(=O)CC(C[N+]([O-])=O)c1cc2ccccc2o1>>O=C1CC(CN1)c1cc2ccccc2o1.CCO.O.[OH-]"
+  },
+  {
+    "id": 68,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['C', 'C']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "C",
+      "C"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CCOC(C)(OCC)OCC.OCC(CO)(CO)CO>>CC12OCC(CO)(CO1)CO2.C.C.OCC(CO)CO",
+    "expected_rxn": ""
+  },
+  {
+    "id": 103,
+    "source": "SynRBL",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "C"
+    ],
+    "borderline_species": [
+      "Cl"
+    ],
+    "output_rxn": "C=CCN.C=CCN.O(C(Cl)=O)C.[H].[H].[H].[H]>>N(C(OC)=O)CC=C.C.CCN.Cl",
+    "expected_rxn": "[CH2:4]=[CH:3][CH2:2][NH2:1].[O:10]([C:11]([Cl:12])=[O:13])[CH3:9]>>[NH:1]([C:11]([O:10][CH3:9])=[O:13])[CH2:2][CH:3]=[CH2:4].[ClH:12]"
+  },
+  {
+    "id": 129,
+    "source": "exhaustive_allocation",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [
+      "O"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O",
+      "[O]",
+      "O",
+      "[H]",
+      "[H]",
+      "O",
+      "O"
+    ],
+    "borderline_species": [
+      "Br"
+    ],
+    "output_rxn": "C1CC(=O)N(C1=O)Br.C=1C=CC=C(C=1)C=CC2=CC=CC=C2.O.[O].[H+].[Br-].O.[H].[H]>>C=1C=CC(C(C(Br)C=2C=CC=CC=2)O)=CC=1.O=C1CCC(=O)N1.Br.O.O",
+    "expected_rxn": "[CH2:3]1[CH2:4][C:7](=[O:8])[N:5]([C:2]1=[O:1])[Br:6].[CH:16]=1[CH:15]=[CH:14][CH:13]=[C:12]([CH:17]=1)[CH:11]=[CH:10][C:9]2=[CH:18][CH:19]=[CH:20][CH:21]=[CH:22]2.[OH2:23]>>[CH:20]=1[CH:19]=[CH:18][C:9]([CH:10]([CH:11]([Br:6])[C:12]=2[CH:13]=[CH:14][CH:15]=[CH:16][CH:17]=2)[OH:23])=[CH:22][CH:21]=1.[O:1]=[C:2]1[CH2:3][CH2:4][C:7](=[O:8])[NH:5]1"
+  },
+  {
+    "id": 133,
+    "source": "SynRBL",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O"
+    ],
+    "exp_spectators": [
+      "O"
+    ],
+    "problematic_species": [
+      "O",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC1(C)OC(CO1)COC(CCCCCC=CCCCCCC)=O.O.[H].[H].[H].[H]>>C(CC)CCCC=CCCCCCC(=O)OCC(CO)O.CCC.O",
+    "expected_rxn": "CC1(C)OC(CO1)COC(CCCCCC=CCCCCCC)=O.O.O.O>>C(CC)CCCC=CCCCCCC(=O)OCC(CO)O.CC(C)=O.O.O"
+  },
+  {
+    "id": 134,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O",
+      "O",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C1=C(C(=CC=C1)N)N.COC(C(=O)CC)=O.O>>C(C)C=1N=C2C=CC=CC2=NC=1O.CO.O.O",
+    "expected_rxn": "C1=C(C(=CC=C1)N)N.COC(C(=O)CC)=O>>C(C)C=1N=C2C=CC=CC2=NC=1O.CO.O"
+  },
+  {
+    "id": 138,
+    "source": "SynRBL",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O"
+    ],
+    "exp_spectators": [
+      "O"
+    ],
+    "problematic_species": [
+      "O",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC1(C)OC2C(O1)CN3C2C(O)CCC3.O.[H].[H].[H].[H]>>C1C(O)C2C(O)C(CN2CC1)O.CCC.O",
+    "expected_rxn": "CC1(C)OC2C(O1)CN3C2C(O)CCC3.O.O.O>>C1C(O)C2C(O)C(CN2CC1)O.CC(C)=O.O.O"
+  },
+  {
+    "id": 140,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[CH2:6]1[CH2:5][CH:4]([CH2:9][CH2:8][CH2:7]1)[C:2]([CH3:1])=[O:3].[CH:15]1=[C:14]([C:12]([O:11][OH:10])=[O:13])[CH:19]=[CH:18][CH:17]=[CH:16]1>>[C:14]1([C:12](=[O:13])[OH:11])[CH:19]=[CH:18][CH:17]=[CH:16][CH:15]=1.[CH2:6]1[CH2:5][CH:4]([CH2:9][CH2:8][CH2:7]1)[O:10][C:2](=[O:3])[CH3:1]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 170,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "N#Cc1ccccc1.[H].[H].[H].[H].O=C1C(=C(C(=C1c1ccccc1)c1ccccc1)c1ccccc1)c1ccccc1>>CO.c1ccc(cc1)-c1nc(-c2ccccc2)c(-c2ccccc2)c(-c2ccccc2)c1-c1ccccc1",
+    "expected_rxn": "O=C1C(=C(C(=C1c1ccccc1)c1ccccc1)c1ccccc1)c1ccccc1.N#Cc1ccccc1.[O]>>c1ccc(cc1)-c1nc(-c2ccccc2)c(-c2ccccc2)c(-c2ccccc2)c1-c1ccccc1.O=C=O"
+  },
+  {
+    "id": 177,
+    "source": "bridge",
+    "has_expected": true,
+    "grade": "A",
+    "sub_type": "expected_spectator",
+    "note": "预期答案含旁观物种，Pipeline正确省略",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [
+      "N"
+    ],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "N#CC(=C(CC)OC)C1=CC=C(C=C1)Cl.NC(N)=N>>C1(=NC(N)=C(C2=CC=C(C=C2)Cl)C(CC)=N1)N.CO",
+    "expected_rxn": "N#CC(=C(CC)OC)C1=CC=C(C=C1)Cl.NC(N)=N.N>>C1(=NC(N)=C(C2=CC=C(C=C2)Cl)C(CC)=N1)N.CO.N"
+  },
+  {
+    "id": 184,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O=C(Cl)C(=O)Cl",
+      "CS(C)=O"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(C)(C)[Si](C)(C)OCC1OC2(CCCC2)OC1CO.CS(C)=O.O=C(C(=O)Cl)Cl.[O]>>CC(C)(C)[Si](C)(C)OCC1OC2(CCCC2)OC1C=O.CS(C)=O.O=C(Cl)C(=O)Cl.O",
+    "expected_rxn": "[O].CC(C)(C)[Si](C)(C)OCC1OC2(CCCC2)OC1CO>>O.CC(C)(C)[Si](C)(C)OCC1OC2(CCCC2)OC1C=O"
+  },
+  {
+    "id": 185,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O=C(Cl)C(=O)Cl",
+      "CS(C)=O"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(C)(C)[Si](C)(C)OCC1OC2(CCCC2)OC1C(C)O.CS(C)=O.O=C(C(=O)Cl)Cl.[O]>>CC(C)(C)[Si](C)(C)OCC1C(C(C)=O)OC2(CCCC2)O1.CS(C)=O.O=C(Cl)C(=O)Cl.O",
+    "expected_rxn": "[O].CC(C)(C)[Si](C)(C)OCC1OC2(CCCC2)OC1C(C)O>>O.CC(C)(C)[Si](C)(C)OCC1C(C(C)=O)OC2(CCCC2)O1"
+  },
+  {
+    "id": 197,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[F-:2].[O:27]1[CH2:28][CH2:29][CH2:30][O:31][CH:26]1[C:25]=2[C:32]([O:33][CH3:34])=[CH:35][CH:36]=[C:22]([O:21][CH3:20])[C:23]=2[Br:24].[CH3:17][Si:16]([CH3:18])([CH3:19])[O:15][C:13]([CH:12]=[C:6]([O:7][Si:8]([CH3:9])([CH3:10])[CH3:11])[O:5][CH2:4][CH3:3])=[CH2:14].[F-:1].[H+]>>[Br-:24].[CH3:17][Si:16]([CH3:18])([CH3:19])[F:2].[CH3:9][Si:8]([CH3:10])([CH3:11])[F:1].[CH2:28]1[O:27][CH:26]([O:31][CH2:30][CH2:29]1)[C:25]2=[C:23]([C:22]([O:21][CH3:20])=[CH:36][CH:35]=[C:32]2[O:33][CH3:34])[CH2:14][C:13]([CH2:12][C:6](=[O:7])[O:5][CH2:4][CH3:3])=[O:15]",
+    "expected_rxn": "[F-:2].[O:27]1[CH2:28][CH2:29][CH2:30][O:31][CH:26]1[C:25]=2[C:32]([O:33][CH3:34])=[CH:35][CH:36]=[C:22]([O:21][CH3:20])[C:23]=2[Br:24].[CH3:17][Si:16]([CH3:18])([CH3:19])[O:15][C:13]([CH:12]=[C:6]([O:7][Si:8]([CH3:9])([CH3:10])[CH3:11])[O:5][CH2:4][CH3:3])=[CH2:14].[F-:1].[H+].[H+]>>[CH3:9][Si:8]([CH3:10])([CH3:11])[F:2].[H+:24].[CH3:17][Si:16]([CH3:18])([CH3:19])[F:1].[Br-:24].[CH2:28]1[O:27][CH:26]([O:31][CH2:30][CH2:29]1)[C:25]2=[C:23]([C:22]([O:21][CH3:20])=[CH:36][CH:35]=[C:32]2[O:33][CH3:34])[CH2:14][C:13]([CH2:12][C:6](=[O:7])[O:5][CH2:4][CH3:3])=[O:15]"
+  },
+  {
+    "id": 206,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "G",
+    "sub_type": "h_radical_only",
+    "note": "仅含[H]自由基副产物(2个)",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[H].[H].[CH:39]1=[C:38]([CH:43]=[CH:42][CH:41]=[CH:40]1)[Se:37][Se:36][C:44]2=[CH:45][CH:46]=[CH:47][CH:48]=[CH:49]2.[O:9]=[S:8](=[O:10])([O:11][CH2:12][CH2:13][C:14]1([CH:33]2[N:29]([CH2:30][CH:31]=[CH2:32])[CH2:28][CH2:27][C:26]23[CH:16]([C:17]([NH:19][C:20]4=[CH:25][CH:24]=[CH:23][CH:22]=[C:21]34)=[O:18])[CH2:15]1)[CH:34]=[CH2:35])[C:5]5=[CH:4][CH:3]=[C:2]([CH:7]=[CH:6]5)[CH3:1]>>[CH:16]12[C:17](=[O:18])[NH:19][C:20]=3[C:21]([C:26]14[CH:33]([C:14]([CH2:15]2)([CH2:13][CH2:12][Se:37][C:38]5=[CH:43][CH:42]=[CH:41][CH:40]=[CH:39]5)[CH:34]=[CH2:35])[N:29]([CH2:28][CH2:27]4)[CH2:30][CH:31]=[CH2:32])=[CH:22][CH:23]=[CH:24][CH:25]=3.[CH:47]=1[CH:48]=[CH:49][C:44]([SeH:36])=[CH:45][CH:46]=1.[O:9]=[S:8](=[O:10])([OH:11])[C:5]1=[CH:4][CH:3]=[C:2]([CH:7]=[CH:6]1)[CH3:1]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 227,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "O.[CH3:11][C:10]([CH3:12])([O:9][C:7]([C:15]1=[CH:16][N:17]([C:18]=2[CH:23]=[CH:22][CH:21]=[CH:20][C:19]1=2)[S:24](=[O:26])(=[O:25])[C:27]3=[CH:33][CH:32]=[C:30]([CH3:31])[CH:29]=[CH:28]3)([C:6]#[C:5][C:3](=[O:4])[O:2][CH3:1])[CH3:8])[O:13][CH3:14]>>[O:25]=[S:24](=[O:26])([N:17]1[C:16]=2[C:15](=[C:7]([CH3:8])[CH:6]([C:5]=2[C:3]([O:2][CH3:1])=[O:4])[O:13][CH3:14])[C:19]3=[CH:20][CH:21]=[CH:22][CH:23]=[C:18]13)[C:27]=4[CH:33]=[CH:32][C:30](=[CH:29][CH:28]=4)[CH3:31].[CH3:11][OH:12].[O:9]=[CH:10][CH3:12]",
+    "expected_rxn": "[CH3:11][C:10]([CH3:12])([O:9][C:7]([C:15]1=[CH:16][N:17]([C:18]=2[CH:23]=[CH:22][CH:21]=[CH:20][C:19]1=2)[S:24](=[O:26])(=[O:25])[C:27]3=[CH:33][CH:32]=[C:30]([CH3:31])[CH:29]=[CH:28]3)([C:6]#[C:5][C:3](=[O:4])[O:2][CH3:1])[CH3:8])[O:13][CH3:14]>>[O:25]=[S:24](=[O:26])([N:17]1[C:16]=2[C:15](=[C:7]([CH3:8])[CH:6]([C:5]=2[C:3]([O:2][CH3:1])=[O:4])[O:13][CH3:14])[C:19]3=[CH:20][CH:21]=[CH:22][CH:23]=[C:18]13)[C:27]=4[CH:33]=[CH:32][C:30](=[CH:29][CH:28]=4)[CH3:31].CC(C)=O"
+  },
+  {
+    "id": 235,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(C)CC(=O)C1=C(O)C=C(O)C=C1O.CC(C)CC(OC)OC.CC1(C)C(=O)C=C(O)C(C)(C)C1=O>>CC1(C)C(C(C)(C)C=2OC=3C(C(C=2C1=O)CC(C)C)=C(O)C=C(C=3C(=O)CC(C)C)O)=O.CO.CO.O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 237,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "G",
+    "sub_type": "h_radical_only",
+    "note": "仅含[H]自由基副产物(2个)",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "BrC1=CC=CC=2C=CC=CC1=2.C=1C=CC(=CC=1)C#CC2=CC=CC=C2.[H].[H]>>C12=C(CC3=CC=CC=C13)C=4C=CC=CC=4C=C2.BrCc1ccccc1",
+    "expected_rxn": ""
+  },
+  {
+    "id": 241,
+    "source": "SynRBL",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O"
+    ],
+    "exp_spectators": [
+      "O"
+    ],
+    "problematic_species": [
+      "O",
+      "[H]",
+      "[H]",
+      "C",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "COC(OC)C1C2C(=O)C(C(C1C=C2)C)SC.O.[H].[H]>>C1(C2(SC)C(C)C3C(C1C=C3)C2O)=O.C.CO.O",
+    "expected_rxn": "COC(OC)C1C2C(=O)C(C(C1C=C2)C)SC.O.O>>C1(C2(SC)C(C)C3C(C1C=C3)C2O)=O.CO.CO.O"
+  },
+  {
+    "id": 245,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[CH4:0]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[CH3:33][CH:32]([CH3:34])[O:31][C:30]1=[CH:29][C:28]=2[C:26]([Br:27])=[CH:25][C:24]=3[C:23](=[C:43]([OH:44])[CH:42]=[C:39]([O:40][CH3:41])[C:38]=3[C:37]=2[CH:36]=[CH:35]1)[C:19]4=[C:20]([CH:22]=[C:3]([O:2][CH3:1])[C:4]5=[C:18]4[CH:17]=[C:15]([Br:16])[C:14]6=[CH:13][C:8](=[CH:7][CH:6]=[C:5]56)[O:9][CH:10]([CH3:11])[CH3:12])[OH:21]>>[CH3:11][CH:10]([CH3:12])[O:9][C:8]=1[CH:13]=[C:14]2[C:15](=[CH:17][C:18]3=[C:4]([C:3](=[CH:22][C:20]=4[O:21][C:43](=[O:44])[C:23]5([CH2:42][C:39]([C:38]=6[C:37]=7[C:28]([C:26]([Br:27])=[CH:25][C:24]5=6)=[CH:29][C:30](=[CH:35][CH:36]=7)[O:31][CH:32]([CH3:33])[CH3:34])=[O:40])[C:19]3=4)[O:2][CH3:1])[C:5]2=[CH:6][CH:7]=1)[Br:16].[CH4:0]",
+    "expected_rxn": "[CH3:33][CH:32]([CH3:34])[O:31][C:30]1=[CH:29][C:28]=2[C:26]([Br:27])=[CH:25][C:24]=3[C:23](=[C:43]([OH:44])[CH:42]=[C:39]([O:40][CH3:41])[C:38]=3[C:37]=2[CH:36]=[CH:35]1)[C:19]4=[C:20]([CH:22]=[C:3]([O:2][CH3:1])[C:4]5=[C:18]4[CH:17]=[C:15]([Br:16])[C:14]6=[CH:13][C:8](=[CH:7][CH:6]=[C:5]56)[O:9][CH:10]([CH3:11])[CH3:12])[OH:21]>>[CH3:11][CH:10]([CH3:12])[O:9][C:8]=1[CH:13]=[C:14]2[C:15](=[CH:17][C:18]3=[C:4]([C:3](=[CH:22][C:20]=4[O:21][C:43](=[O:44])[C:23]5([CH2:42][C:39]([C:38]=6[C:37]=7[C:28]([C:26]([Br:27])=[CH:25][C:24]5=6)=[CH:29][C:30](=[CH:35][CH:36]=7)[O:31][CH:32]([CH3:33])[CH3:34])=[O:40])[C:19]3=4)[O:2][CH3:1])[C:5]2=[CH:6][CH:7]=1)[Br:16].I[CH3:41]"
+  },
+  {
+    "id": 298,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(C)(C)OC(=O)N1C(CC2CCCCOC2)COC1(C)C.O.[H].[H].[H].[H]>>CC(C)(C)OC(=O)NC(CO)CC1CCCCOC1.CCC.O",
+    "expected_rxn": "CC(C)(C)OC(=O)N1C(CC2CCCCOC2)COC1(C)C.O>>CC(C)(C)OC(=O)NC(CO)CC1CCCCOC1.CC(C)=O"
+  },
+  {
+    "id": 306,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['O', '[H]', '[H]', 'C', 'O']",
+    "main_overlap": false,
+    "out_spectators": [
+      "O"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O",
+      "[H]",
+      "[H]",
+      "C",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "COC(=O)C1(CC=C)CCOCC1.O=[Os](=O)(=O)=O.O.[H].[H]>>COC(=O)C1(CC=O)CCOCC1.C.O.[O]=[Os](=[O])=[O]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 317,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', 'O', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "O",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CO.ClC=1C(=CC=C(C(C2=CC=NN2C)=O)C=1Cl)O.[H].[H]>>C=1C=NN(C=1C(=C)C=2C(=C(Cl)C(=CC=2)O)Cl)C.O.O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 326,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]', 'N', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]",
+      "N",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CCl.C(C)OP(OCC)([S-])=S.[NH4+].[O]>>C(C)OP(OCC)(SCCl)=S.N.O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 337,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [
+      "COC(C)(OC)OC",
+      "O"
+    ],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "C",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(C)(C)[Si](C)(C)OCC1OC(C)(C)OC1C(O)C=C.O(C)C(OC)(OC)C.[H].[H]>>CC(C)(C)[Si](C)(C)OCC1OC(C)(C)OC1C=CCCC(OC)=O.C.CO.O",
+    "expected_rxn": "CC(C)(C)[Si](C)(C)OCC1OC(C)(C)OC1C(O)C=C.O(C)C(OC)(OC)C.C=CC=O.O>>CC(C)(C)[Si](C)(C)OCC1OC(C)(C)OC1C=CCCC(OC)=O.O.O(C)C(OC)(OC)C"
+  },
+  {
+    "id": 358,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[OH2:11]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[O:3]=[C:2]([C:4]1=[CH:5][CH:6]=[CH:7][CH:8]=[CH:9]1)[CH3:1].[CH:16]1=[CH:17][CH:18]=[C:19]([Br:20])[C:14]([C:12](=[O:13])[O:11][CH3:10])=[CH:15]1>>[C:19]=12[CH:18]=[CH:17][CH:16]=[CH:15][C:14]=1[C:12](=[O:13])[O:3][C:2]([C:4]3=[CH:9][CH:8]=[CH:7][CH:6]=[CH:5]3)=[CH:1]2.[OH:11][H].[Br:20][CH3:10]",
+    "expected_rxn": "[CH:16]1=[CH:17][CH:18]=[C:19]([Br:20])[C:14]([C:12](=[O:13])[O:11][CH3:10])=[CH:15]1.[O:3]=[C:2]([C:4]1=[CH:5][CH:6]=[CH:7][CH:8]=[CH:9]1)[CH3:1]>>[C:19]12[CH:18]=[CH:17][CH:16]=[CH:15][C:14]=1[C:12](=[O:13])[O:3][C:2]([C:4]3=[CH:9][CH:8]=[CH:7][CH:6]=[CH:5]3)=[CH:1]2.[Br:20][CH3:10].[OH2:11]"
+  },
+  {
+    "id": 359,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[CH:15]=1[CH:16]=[C:17]([C:18]([Cl:19])=[O:20])[C:12]([O:11][CH3:10])=[CH:13][CH:14]=1.[CH3:1][C:2]#[C:3][C:4]1=[CH:5][CH:6]=[CH:7][CH:8]=[CH:9]1>>[CH3:10][Cl:19].[CH:5]=1[C:4](=[CH:9][CH:8]=[CH:7][CH:6]=1)[C:3]=2[O:11][C:12]=3[C:17]([C:18](=[O:20])[C:2]=2[CH3:1])=[CH:16][CH:15]=[CH:14][CH:13]=3",
+    "expected_rxn": ""
+  },
+  {
+    "id": 366,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "O=C(Cl)Cl.C1CCC(CC1)NC1CCCCC1.CCOC(=O)CNS(=O)(=O)c1cnc(N)s1>>[H+].[H+].[Cl-].[Cl-].CCOC(=O)CNS(=O)(=O)c1cnc(NC(=O)N(C2CCCCC2)C2CCCCC2)s1",
+    "expected_rxn": "C(=O)=O.CCOC(=O)CNS(=O)(=O)c1cnc(N)s1.C1CCC(CC1)NC1CCCCC1>>O.CCOC(=O)CNS(=O)(=O)c1cnc(NC(=O)N(C2CCCCC2)C2CCCCC2)s1"
+  },
+  {
+    "id": 383,
+    "source": "bridge",
+    "has_expected": true,
+    "grade": "A",
+    "sub_type": "expected_spectator",
+    "note": "预期答案含旁观物种，Pipeline正确省略",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [
+      "[Li][CH2]CCC"
+    ],
+    "problematic_species": [],
+    "borderline_species": [
+      "Br"
+    ],
+    "output_rxn": "CC(C)(C)N.C1=C(C=CC=C1)Br>>CC(C)(C)NC1=CC=CC=C1.Br",
+    "expected_rxn": "C(CC[Li])C.C1=C(C=CC=C1)Br.CC(C)(C)N>>CC(C)(C)NC1=CC=CC=C1.Br.[Li][CH2]CCC"
+  },
+  {
+    "id": 387,
+    "source": "bridge",
+    "has_expected": true,
+    "grade": "A",
+    "sub_type": "expected_spectator",
+    "note": "预期答案含旁观物种，Pipeline正确省略",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [
+      "CCN(CC)CC",
+      "Cl"
+    ],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "C(=O)=NC.C1CNCCC12CC(N(C2=O)OC)=O>>C1CC2(CCN1C(NC)=O)CC(N(C2=O)OC)=O",
+    "expected_rxn": "C(=O)=NC.C(C)N(CC)CC.C1CNCCC12CC(N(C2=O)OC)=O.Cl>>C1CC2(CCN1C(NC)=O)CC(N(C2=O)OC)=O.CCN(CC)CC.Cl"
+  },
+  {
+    "id": 402,
+    "source": "template_matching",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [
+      "Cl",
+      "Cc1ccc(NC(=O)c2ccc(N3CCOCC3)nc2)cc1I"
+    ],
+    "exp_spectators": [
+      "[CH3:26][c:27]1[c:28]([I:29])[cH:30][c:31]([NH:32][C:33](=[O:34])[c:35]2[cH:36][n:37][c:38]([N:41]3[CH2:42][CH2:43][O:44][CH2:45][CH2:46]3)[cH:39][cH:40]2)[cH:47][cH:48]1",
+      "[ClH:25]"
+    ],
+    "problematic_species": [],
+    "borderline_species": [
+      "Cl",
+      "Cl"
+    ],
+    "output_rxn": "C1C(CN1)(F)F.C1CN(CCO1)C2=NC=C(C(=O)NC=3C=C(I)C(=CC=3)C)C=C2.C=1C(=C(C=CC=1NC(=O)C=2C=CC(Cl)=NC=2)C)I.Cl>>C1N(CC1(F)F)C2=NC=C(C(NC3=CC(=C(C=C3)C)I)=O)C=C2.[Cl-].[H+].C1CN(CCO1)C2=NC=C(C(=O)NC=3C=C(I)C(=CC=3)C)C=C2.Cl",
+    "expected_rxn": "[CH2:20]1[C:19]([CH2:22][NH:21]1)([F:18])[F:23].[CH2:43]1[CH2:42][N:41]([CH2:46][CH2:45][O:44]1)[C:38]2=[N:37][CH:36]=[C:35]([C:33](=[O:34])[NH:32][C:31]=3[CH:30]=[C:28]([I:29])[C:27](=[CH:48][CH:47]=3)[CH3:26])[CH:40]=[CH:39]2.[CH:9]=1[C:10](=[C:11]([CH:12]=[CH:13][C:8]=1[NH:7][C:5](=[O:6])[C:4]=2[CH:16]=[CH:17][C:1]([Cl:24])=[N:2][CH:3]=2)[CH3:14])[I:15].[ClH:25]>>[CH2:20]1[N:21]([CH2:22][C:19]1([F:18])[F:23])[C:1]2=[N:2][CH:3]=[C:4]([C:5]([NH:7][C:8]3=[CH:9][C:10](=[C:11]([CH:12]=[CH:13]3)[CH3:14])[I:15])=[O:6])[CH:16]=[CH:17]2.[CH3:26][c:27]1[c:28]([I:29])[cH:30][c:31]([NH:32][C:33](=[O:34])[c:35]2[cH:36][n:37][c:38]([N:41]3[CH2:42][CH2:43][O:44][CH2:45][CH2:46]3)[cH:39][cH:40]2)[cH:47][cH:48]1.[ClH:24].[ClH:25]"
+  },
+  {
+    "id": 429,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', '[H]', '[H]', 'C', 'N']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "C",
+      "N"
+    ],
+    "borderline_species": [
+      "I"
+    ],
+    "output_rxn": "C1CC(CCN1CCCC#N)CCCC.CC1=C(C=CC(C)=C1)I.CO.[H].[H].[H].[H]>>C1CN(CCC1CCCC)CCCC(=O)C=2C=CC(=CC=2C)C.C.I.N",
+    "expected_rxn": ""
+  },
+  {
+    "id": 444,
+    "source": "SynRBL",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O=C([O-])O",
+      "O",
+      "[Na+]",
+      "Cl"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O",
+      "O",
+      "O",
+      "O"
+    ],
+    "borderline_species": [
+      "Cl",
+      "Cl",
+      "Cl",
+      "Cl"
+    ],
+    "output_rxn": "COCC(=O)C=C(C(OCC)=O)O.Cl.Cl.NN.O.[Na+].[O-]C(=O)O>>N1N=C(COC)C=C1C(=O)OCC.Cl.Cl.O.O.O.O=C([O-])O.[Na+]",
+    "expected_rxn": "COCC(=O)C=C(C(OCC)=O)O.NN>>O.O.N1N=C(COC)C=C1C(=O)OCC"
+  },
+  {
+    "id": 458,
+    "source": "SynRBL",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['N']",
+    "main_overlap": false,
+    "out_spectators": [
+      "Cl"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "N"
+    ],
+    "borderline_species": [
+      "Cl",
+      "Cl"
+    ],
+    "output_rxn": "C(C)N(CC)CC.Cl.ClCC(=O)OC(CCl)=O.O=S(=O)(C)NC=1C=C(C#N)C=C(C2=CN3C(C=CC=N3)=N2)C=1.ON>>O=S(=O)(NC1=CC(=CC(C2=NOC(=N2)CCl)=C1)C=3N=C4C=CC=NN4C=3)C.CC.CC.CC(=O)OC(=O)CCl.Cl.N",
+    "expected_rxn": ""
+  },
+  {
+    "id": 478,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "[Cs+]",
+      "O=C([O-])[O-]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "C[Si](C)(C)CCOC(=O)NCC1=CC=C(Br)C=C1.O=C(O)C1=C(C)N=CS1.[Cs+].[Cs+].[O-]C([O-])=O>>C[Si](C)(C)CCOC(=O)NCC=1C=CC(C2=C(C)N=CS2)=CC=1.O=C(O)Br.O=C([O-])[O-].[Cs+].[Cs+]",
+    "expected_rxn": "O=C(O)C1=C(C)N=CS1.C[Si](C)(C)CCOC(=O)NCC1=CC=C(Br)C=C1>>C[Si](C)(C)CCOC(=O)NCC=1C=CC(C2=C(C)N=CS2)=CC=1.O=C(O)Br"
+  },
+  {
+    "id": 480,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "C",
+      "O",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CO.FC(F)(F)C(=CC(C)=O)O.N#CCC#N.[H].[H]>>FC(F)(F)C1=C(C#N)C(O)=NC(=C1)C.C.O.O",
+    "expected_rxn": "[N:12]#[C:11][CH2:10][C:9]#[N:13].[F:1][C:2]([F:8])([F:7])[C:3](=[CH:4][C:5]([CH3:6])=[O:15])[OH:16]>>[F:1][C:2]([F:8])([F:7])[C:3]1=[C:10]([C:11]#[N:12])[C:9]([OH:14])=[N:13][C:5](=[CH:4]1)[CH3:6].[OH:16][H]"
+  },
+  {
+    "id": 487,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', 'C']",
+    "main_overlap": false,
+    "out_spectators": [
+      "Cl"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "C"
+    ],
+    "borderline_species": [
+      "Cl",
+      "Cl"
+    ],
+    "output_rxn": "C(C)N(CC)CC.C(NN)=O.Cl.FC(F)(F)OC=1C=CC(C=CC#N)=CC=1.[H].[H]>>FC(F)(F)OC1=CC=C(C=C1)C=CC2=NN=CN2.C.CC.CC.Cl.NC=O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 501,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['O', '[O]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [
+      "O=S(=O)(O)O",
+      "O=C([O-])O",
+      "O",
+      "[Na+]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O",
+      "[O]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C(=O)(C)OC(=O)C.O.O=S(=O)(O)O.O=S(=O)(OC=1C=CC2=C(C(C)(C)C(O2)OCC)C=1)C.[Na+].[O-]C(=O)O.[O]>>O=S(=O)(OC=1C=CC2=C(C=1)C(C)(C)C(O2)OC(=O)C)C.CC(=O)OC(C)O.O=C([O-])O.O=S(=O)(O)O.[Na+].O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 509,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]']",
+    "main_overlap": false,
+    "out_spectators": [
+      "CC(C)NC(C)C",
+      "CI"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C(CC[Li])C.CC(C)(C)[Si](C)(C)OC1=CC=C(C(C(O)=O)C)C=C1.CC(C)NC(C)C.IC.[O]>>CC(C)(C)[Si](C)(C)OC1=CC=C(C=C1)C(C)(C)C(O)=O.CC(C)NC(C)C.CI.[Li][CH2]CCO",
+    "expected_rxn": ""
+  },
+  {
+    "id": 510,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]']",
+    "main_overlap": false,
+    "out_spectators": [
+      "[Li+]",
+      "CI"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(C)(C)[Si](C)(C)OC1=CC=C(CC(O)=O)C=C1.CC(C)[N-]C(C)C.IC.[Li+].[O]>>CC(C)(C)[Si](C)(C)OC1=CC=C(C(C(O)=O)C)C=C1.CC(C)[N-]C(C)O.CI.[Li+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 514,
+    "source": "template_matching",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "[K+]",
+      "O",
+      "CC(C)(C)[O-]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C1=2C=CC=CC1=C(O)C=C3SC=4C=CC=CC=4N(C(C)=O)C=23.CC(C)(C)[O-].IC.O.[K+]>>C1=C2SC=3C=CC=CC=3N(C(C)=O)C2=C4C=CC=CC4=C1OC.[H+].[I-].CC(C)(C)[O-].O.[K+]",
+    "expected_rxn": "C1=2C=CC=CC1=C(O)C=C3SC=4C=CC=CC=4N(C(C)=O)C=23.IC>>[I-].C1=C2SC=3C=CC=CC=3N(C(C)=O)C2=C4C=CC=CC4=C1OC.[H+]"
+  },
+  {
+    "id": 524,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [
+      "[Li+]",
+      "CC(C)[N-]C(C)C",
+      "CCCI",
+      "[Li][CH2]CCC"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "C(C)CI.C(C)N(CC)C(=O)NC1CC2C3=CC=CC4=C3C(CC2N(C1)C)=C(C#C)N4.C(CC[Li])C.CC(C)NC(C)C.CC(C)[N-]C(C)C.[Li+]>>CCN(CC)C(NC1CN(C2CC3=C(N(CCC)C4=C3C(=CC=C4)C2C1)C#C)C)=O.CC(C)N.CC(C)[N-]C(C)C.CCCI.[Li+].[Li][CH2]CCC",
+    "expected_rxn": ""
+  },
+  {
+    "id": 529,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[CH2:12]1[CH:13]([O:14]1)[CH2:15][OH:16].[F:39][C:40]1=[CH:41][CH:42]=[C:43]([CH:45]=[CH:46]1)[O:44][C:17]2=[CH:18][CH:19]=[C:20]([F:21])[CH:22]=[CH:23]2.[CH2:1]([C:2]1=[CH:3][CH:4]=[CH:5][CH:6]=[CH:7]1)[O:8][CH2:9][C:10]#[CH:11]>>[F:39][C:40]1=[CH:41][CH:42]=[C:43]([CH:45]=[CH:46]1)[OH:44].[CH2:1]([C:2]1=[CH:3][CH:4]=[CH:5][CH:6]=[CH:7]1)[O:8][CH2:9][C:10]#[C:11][CH2:12][CH:13]([OH:14])[CH2:15][O:16][C:17]2=[CH:18][CH:19]=[C:20]([CH:22]=[CH:23]2)[F:21]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 537,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[CH3:2][C:1]([CH3:3])([CH3:4])[O:5][C:6](=[O:7])[C:8]1([CH2:12][CH2:13]1)[CH2:9][CH:10]=[CH2:14].[H].[H].[O:11]=[O+:16][O-:15]>>C=O.[CH3:2][C:1]([CH3:3])([CH3:4])[O:5][C:6]([C:8]1([CH2:12][CH2:13]1)[CH2:9][CH:10]=[O:11])=[O:7].O",
+    "expected_rxn": "[CH3:2][C:1]([CH3:3])([CH3:4])[O:5][C:6](=[O:7])[C:8]1([CH2:12][CH2:13]1)[CH2:9][CH:10]=[CH2:14].[O:11]=[O+:16][O-:15]>>[CH3:2][C:1]([CH3:3])([CH3:4])[O:5][C:6]([C:8]1([CH2:12][CH2:13]1)[CH2:9][CH:10]=[O:11])=[O:7].[CH2:14]=[O:16].[O:15]"
+  },
+  {
+    "id": 538,
+    "source": "template_matching",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [
+      "[K+]",
+      "CC(C)(C)[O-]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "CC(C)(C)OC(=O)N1CCC(CC1)C2=NOC3=C2C=CC(=C3O)F.CC(C)(C)[O-].IC.[K+]>>CC(C)(C)OC(=O)N1CCC(CC1)C2=NOC=3C(OC)=C(F)C=CC2=3.[H+].[I-].CC(C)(C)[O-].[K+]",
+    "expected_rxn": "[I:31][CH3:23].[CH3:2][C:1]([CH3:3])([CH3:4])[O:5][C:6](=[O:7])[N:8]1[CH2:9][CH2:10][CH:11]([CH2:24][CH2:25]1)[C:12]2=[N:13][O:14][C:15]3=[C:16]2[CH:17]=[CH:18][C:19](=[C:21]3[OH:22])[F:20].[CH3:26][C:27]([CH3:28])([CH3:29])[O-:30]>>[CH3:26][C:27]([CH3:28])([CH3:29])[O:30][H].[CH3:2][C:1]([CH3:3])([CH3:4])[O:5][C:6](=[O:7])[N:8]1[CH2:9][CH2:10][CH:11]([CH2:24][CH2:25]1)[C:12]2=[N:13][O:14][C:15]=3[C:21]([O:22][CH3:23])=[C:19]([F:20])[CH:18]=[CH:17][C:16]2=3.[I-:31]"
+  },
+  {
+    "id": 540,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', '[H]', '[H]', '[H]', '[H]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [
+      "[K+]",
+      "COS(=O)(=O)OC"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(C)(C1=CC=C(C(=O)CCCCl)C=C1)C(=O)O.O=S(=O)(OC)OC.[K+].[K+].[O-]C([O-])=O.[H].[H].[H].[H].[H].[H]>>CC(C)(C1=CC=C(C=C1)C(=O)CCCCl)C(OC)=O.COS(=O)(=O)OC.O.[K+].[K+].[OH-].[OH-]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 545,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[C:19]=12[NH:17][C:16]3=[C:15]([CH2:14][CH2:13][N:2]([C:3]=4[N:12]=[CH:11][C:6]([C:7]([O:9][CH3:10])=[O:8])=[CH:5][N:4]=4)[CH2:1]3)[C:24]=1[CH:23]=[CH:22][CH:21]=[CH:20]2.[CH3:25][C:26]([CH3:27])([CH3:28])[O-:29].[I:30][CH3:18]>>[CH:22]=1[CH:21]=[CH:20][C:19]2=[C:24]([C:15]3=[C:16]([N:17]2[CH3:18])[CH2:1][N:2]([CH2:13][CH2:14]3)[C:3]=4[N:12]=[CH:11][C:6]([C:7]([O:9][CH3:10])=[O:8])=[CH:5][N:4]=4)[CH:23]=1.[I-:30].[CH3:25][C:26]([CH3:27])([CH3:28])[OH:29]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 546,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[Mg:36]",
+      "[Cl:37]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[Br:27][Mg:26][C:5]=1[CH:4]=[CH:3][C:2]([F:1])=[CH:7][CH:6]=1.[C:8](#[N:9])[C:10]1=[CH:11][C:12]2=[C:17]([CH:18]=[CH:19]1)[C:15](=[O:16])[O:14][CH2:13]2.[CH:35]=1[C:29]([F:28])=[CH:30][CH:31]=[C:32]([Br:33])[CH:34]=1.[CH3:23][C:21]([CH3:24])([CH3:22])[C:20](=[O:25])[Cl:37].[Mg:36]>>[Cl:37].[CH3:22][C:21]([CH3:24])([CH3:23])[C:20](=[O:25])[O:14][CH2:13][C:12]=1[C:17](=[CH:18][CH:19]=[C:10]([CH:11]=1)[C:8]#[N:9])[C:15]([C:5]2=[CH:6][CH:7]=[C:2]([F:1])[CH:3]=[CH:4]2)=[O:16].[Br:33][Mg:36][C:29]1=[CH:30][CH:31]=[C:32]([CH:34]=[CH:35]1)[F:28].[Br:27][Mg:26]",
+    "expected_rxn": "[CH3:23][C:21]([CH3:24])([CH3:22])[C:20](=[O:25])[Cl:37].[C:8](#[N:9])[C:10]1=[CH:11][C:12]2=[C:17]([CH:18]=[CH:19]1)[C:15](=[O:16])[O:14][CH2:13]2.[Mg:36].[CH:35]=1[C:29]([F:28])=[CH:30][CH:31]=[C:32]([Br:33])[CH:34]=1.[Br:27][Mg:26][C:5]=1[CH:4]=[CH:3][C:2]([F:1])=[CH:7][CH:6]=1>>[Br:33][Mg:36][C:29]1=[CH:30][CH:31]=[C:32]([CH:34]=[CH:35]1)[F:28].[CH3:22][C:21]([CH3:24])([CH3:23])[C:20](=[O:25])[O:14][CH2:13][C:12]=1[C:17](=[CH:18][CH:19]=[C:10]([CH:11]=1)[C:8]#[N:9])[C:15]([C:5]2=[CH:6][CH:7]=[C:2]([F:1])[CH:3]=[CH:4]2)=[O:16].[Br:27][Mg:26][Cl:37]"
+  },
+  {
+    "id": 550,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "G",
+    "sub_type": "h_radical_only",
+    "note": "仅含[H]自由基副产物(2个)",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CNC=1C=CC=CC=1.O=S(=O)(C=1C=CC(C2=CC=C(C=C2)OC)=CC=1)NC(CC3CO3)C(OC)=O.[H].[H]>>O=S(=O)(NC(CC(CNC1=CC=CC=C1)O)C(=O)O)C=2C=CC(C3=CC=C(C=C3)OC)=CC=2.CC",
+    "expected_rxn": ""
+  },
+  {
+    "id": 551,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "c1ccc(P(c2ccccc2)c2ccccc2)cc1",
+      "O=C(N=NC(=O)N1CCCCC1)N1CCCCC1"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C1=C(C=CC(=C1)O)N2N=CC=C2.C1=CC=CC=C1P(C=2C=CC=CC=2)C=3C=CC=CC=3.C1CCCCN1C(=O)N=NC(=O)N2CCCCC2.N(CCO)C(OCC1=CC=CC=C1)=O>>C1=C(C=CC(OCCNC(OCC2=CC=CC=C2)=O)=C1)N3N=CC=C3.O.O=C(N=NC(=O)N1CCCCC1)N1CCCCC1.c1ccc(P(c2ccccc2)c2ccccc2)cc1",
+    "expected_rxn": "C1=C(C=CC(=C1)O)N2N=CC=C2.N(CCO)C(OCC1=CC=CC=C1)=O>>C1=C(C=CC(OCCNC(OCC2=CC=CC=C2)=O)=C1)N3N=CC=C3.O"
+  },
+  {
+    "id": 553,
+    "source": "bridge",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [
+      "[O:24]=[C:25]([N:26]=[N:27][C:28](=[O:29])[N:30]1[CH2:31][CH2:32][CH2:33][CH2:34][CH2:35]1)[N:36]1[CH2:37][CH2:38][CH2:39][CH2:40][CH2:41]1",
+      "[cH:43]1[cH:44][cH:45][c:46]([P:47]([c:48]2[cH:49][cH:50][cH:51][cH:52][cH:53]2)[c:54]2[cH:55][cH:56][cH:57][cH:58][cH:59]2)[cH:60][cH:61]1"
+    ],
+    "problematic_species": [
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "N(CCO)C(OCC1=CC=CC=C1)=O.O=C(C1=CC=C(C=C1)O)C>>O.N(CCOC1=CC=C(C(=O)C)C=C1)C(OCC2=CC=CC=C2)=O",
+    "expected_rxn": "[CH:53]1=[CH:52][CH:51]=[CH:50][CH:49]=[C:48]1[P:47]([C:54]=2[CH:59]=[CH:58][CH:57]=[CH:56][CH:55]=2)[C:46]=3[CH:60]=[CH:61][CH:43]=[CH:44][CH:45]=3.[CH2:31]1[CH2:32][CH2:33][CH2:34][CH2:35][N:30]1[C:28](=[O:29])[N:27]=[N:26][C:25](=[O:24])[N:36]2[CH2:37][CH2:38][CH2:39][CH2:40][CH2:41]2.[NH:11]([CH2:10][CH2:9][OH:42])[C:12]([O:13][CH2:14][C:15]1=[CH:16][CH:17]=[CH:18][CH:19]=[CH:20]1)=[O:21].[O:3]=[C:2]([C:4]1=[CH:5][CH:6]=[C:7]([CH:22]=[CH:23]1)[OH:8])[CH3:1]>>[NH:11]([CH2:10][CH2:9][O:8][C:7]1=[CH:6][CH:5]=[C:4]([C:2](=[O:3])[CH3:1])[CH:23]=[CH:22]1)[C:12]([O:13][CH2:14][C:15]2=[CH:16][CH:17]=[CH:18][CH:19]=[CH:20]2)=[O:21].[O:24]=[C:25]([N:26]=[N:27][C:28](=[O:29])[N:30]1[CH2:31][CH2:32][CH2:33][CH2:34][CH2:35]1)[N:36]1[CH2:37][CH2:38][CH2:39][CH2:40][CH2:41]1.[OH2:8].[cH:43]1[cH:44][cH:45][c:46]([P:47]([c:48]2[cH:49][cH:50][cH:51][cH:52][cH:53]2)[c:54]2[cH:55][cH:56][cH:57][cH:58][cH:59]2)[cH:60][cH:61]1"
+  },
+  {
+    "id": 557,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [
+      "[NH:26]1[CH2:27][CH2:28][CH:29]([OH:30])[CH2:31][CH2:32]1"
+    ],
+    "problematic_species": [
+      "[O]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C1CC(CCN1)O.O=S(=O)(C1=CC=C(OCC)C(=C1)C2=NC(=O)C3=CN=C(CCC)N3N2)N4CCC(CC4)O.O=S(=O)(Cl)C=1C=C(C=2NN3C(CCC)=NC(CC)=C3C(=O)N=2)C(OCC)=CC=1.[O]>>O=S(=O)(C1=CC=C(C(=C1)C=2NN3C(CCC)=NC(CC)=C3C(N=2)=O)OCC)N4CCC(CC4)O.CCOc1ccc(S(=O)(=O)Cl)cc1-c1nc(=O)c2c(CC)nc(COC3CCNCC3)n2[nH]1.O",
+    "expected_rxn": "[CH2:32]1[CH2:31][CH:29]([CH2:28][CH2:27][NH:26]1)[OH:30].[O:50]=[S:49](=[O:51])([C:48]1=[CH:59][CH:60]=[C:61]([O:62][CH2:63][CH3:64])[C:46](=[CH:47]1)[C:45]2=[N:44][C:42](=[O:43])[C:41]3=[CH:40][N:39]=[C:38]([CH2:37][CH2:36][CH3:35])[N:66]3[NH:65]2)[N:52]4[CH2:58][CH2:57][CH:55]([CH2:54][CH2:53]4)[OH:56].[O:24]=[S:23](=[O:25])([Cl:67])[C:22]=1[CH:21]=[C:5]([C:6]=2[NH:7][N:8]3[C:14]([CH2:15][CH2:16][CH3:17])=[N:13][C:10]([CH2:11][CH3:12])=[C:9]3[C:18](=[O:19])[N:20]=2)[C:4]([O:3][CH2:1][CH3:2])=[CH:34][CH:33]=1>>[O:24]=[S:23](=[O:25])([C:22]1=[CH:33][CH:34]=[C:4]([C:5](=[CH:21]1)[C:6]=2[NH:7][N:8]3[C:14]([CH2:15][CH2:16][CH3:17])=[N:13][C:10]([CH2:11][CH3:12])=[C:9]3[C:18]([N:20]=2)=[O:19])[O:3][CH2:1][CH3:2])[N:26]4[CH2:32][CH2:31][CH:29]([CH2:28][CH2:27]4)[OH:30].[NH:26]1[CH2:27][CH2:28][CH:29]([OH:30])[CH2:31][CH2:32]1.[OH:3][c:4]1[c:5](-[c:6]2[nH:7][n:8]3[c:9]([c:10]([CH2:11][CH3:12])[n:13][c:14]3[CH2:15][CH2:16][CH3:17])[c:18](=[O:19])[n:20]2)[cH:21][c:22]([S:23](=[O:24])(=[O:25])[Cl:67])[cH:33][cH:34]1"
+  },
+  {
+    "id": 558,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "OCC1CCNCC1"
+    ],
+    "exp_spectators": [
+      "CCOc1ccc(S(=O)(=O)N2CCC(O)CC2C)cc1-c1nc(=O)c2c(C)nc(C)n2[nH]1"
+    ],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C1CNCCC1CO.O=S(=O)(Cl)C1=CC=C(OCC)C(=C1)C=2NN3C(C)=NC(C)=C3C(N=2)=O.O=S(=O)(N1CCC(CC1C)O)C2=CC=C(OCC)C(=C2)C=3NN4C(C)=NC(C)=C4C(N=3)=O.[H].[H].[H].[H]>>C1CN(CCC1CO)S(=O)(=O)C2=CC(C3=NC(C4=C(C)N=C(C)N4N3)=O)=C(OCC)C=C2.CC.Cc1nc(C)n2[nH]c(-c3cccc(S(=O)(=O)Cl)c3)nc(=O)c12.O.OCC1CCNCC1",
+    "expected_rxn": "C1CNCCC1CO.O=S(=O)(Cl)C1=CC=C(OCC)C(=C1)C=2NN3C(C)=NC(C)=C3C(N=2)=O.O=S(=O)(N1CCC(CC1C)O)C2=CC=C(OCC)C(=C2)C=3NN4C(C)=NC(C)=C4C(N=3)=O>>C1CN(CCC1CO)S(=O)(=O)C2=CC(C3=NC(C4=C(C)N=C(C)N4N3)=O)=C(OCC)C=C2.[Cl-].[H+].O=S(=O)(N1CCC(CC1C)O)C2=CC=C(OCC)C(=C2)C=3NN4C(C)=NC(C)=C4C(N=3)=O"
+  },
+  {
+    "id": 560,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]']",
+    "main_overlap": false,
+    "out_spectators": [
+      "CI",
+      "[H-]",
+      "[Na+]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C1=CC(Cl)=CC=C1C(C=2C=CC(Cl)=CC=2)N3CC(C3)NS(=O)(=O)C4=CC=C(C=C4)F.CC(=O)OCC.IC.[H-].[Na+].[O]>>C1=C(C=CC(Cl)=C1)C(C2=CC=C(C=C2)Cl)N3CC(C3)N(C)S(=O)(=O)C=4C=CC(F)=CC=4.CC(=O)OCO.CI.[H-].[Na+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 563,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[OH:36][B:37]([OH:38])[C:39]=1[CH:50]=[CH:49][C:42]([C:43]2=[CH:44][CH:45]=[CH:46][CH:47]=[CH:48]2)=[CH:41][CH:40]=1.[O:17]([C:15]([C:14]=1[S:13][C:11]([CH3:12])=[C:10]([NH2:35])[CH:19]=1)=[S:16])[CH3:18]>>[C:15](=[S:16])([C:14]1=[CH:19][C:10]([NH:35][C:39]=2[CH:40]=[CH:41][C:42]([C:43]3=[CH:48][CH:47]=[CH:46][CH:45]=[CH:44]3)=[CH:49][CH:50]=2)=[C:11]([CH3:12])[S:13]1)[O:17][CH3:18].B(O)(O)",
+    "expected_rxn": ""
+  },
+  {
+    "id": 566,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[C:64](=[O:65])([CH3:63])[O:66][C:60](=[O:62])[CH3:61].[CH3:45][C:44]([CH3:46])([CH3:47])[C:43](=[O:48])[O:42][CH2:41][CH:40]1[CH:49]([O:50][CH2:51][C:52]2=[CH:53][CH:54]=[CH:55][CH:56]=[CH:57]2)[CH:58]([OH:59])[CH:9]([O:8][CH2:1][C:2]=3[CH:7]=[CH:6][CH:5]=[CH:4][CH:3]=3)[CH:10]([O:11][CH2:12][CH:13]([CH2:15][CH2:16][CH2:17][CH:18]([CH3:19])[CH:20]4[C:37]5([CH:23]([CH:24]6[CH2:25][CH2:26][CH:27]7[C:32]([CH3:33])([CH:34]6[CH2:35][CH2:36]5)[CH2:31][CH2:30][CH2:29][CH2:28]7)[CH2:22][CH2:21]4)[CH3:38])[CH3:14])[O:39]1.[CH:69]=1[CH:70]=[CH:71][CH:72]=[CH:73][C:68]=1[CH3:67]>>[CH3:45][C:44]([CH3:46])([CH3:47])[C:43](=[O:48])[O:42][CH2:41][CH:40]1[CH:49]([O:50][CH2:51][C:52]=2[CH:57]=[CH:56][CH:55]=[CH:54][CH:53]=2)[CH:58]([O:59][C:60]([CH3:61])=[O:62])[CH:9]([O:8][CH2:1][C:2]3=[CH:3][CH:4]=[CH:5][CH:6]=[CH:7]3)[CH:10]([O:11][CH2:12][CH:13]([CH2:15][CH2:16][CH2:17][CH:18]([CH3:19])[CH:20]4[C:37]5([CH:23]([CH:24]6[CH2:25][CH2:26][CH:27]7[C:32]([CH3:33])([CH:34]6[CH2:35][CH2:36]5)[CH2:31][CH2:30][CH2:29][CH2:28]7)[CH2:22][CH2:21]4)[CH3:38])[CH3:14])[O:39]1.CC(=O)O.c1ccccc1C",
+    "expected_rxn": "[CH3:45][C:44]([CH3:46])([CH3:47])[C:43](=[O:48])[O:42][CH2:41][CH:40]1[CH:49]([O:50][CH2:51][C:52]2=[CH:53][CH:54]=[CH:55][CH:56]=[CH:57]2)[CH:58]([OH:59])[CH:9]([O:8][CH2:1][C:2]=3[CH:7]=[CH:6][CH:5]=[CH:4][CH:3]=3)[CH:10]([O:11][CH2:12][CH:13]([CH2:15][CH2:16][CH2:17][CH:18]([CH3:19])[CH:20]4[C:37]5([CH:23]([CH:24]6[CH2:25][CH2:26][CH:27]7[C:32]([CH3:33])([CH:34]6[CH2:35][CH2:36]5)[CH2:31][CH2:30][CH2:29][CH2:28]7)[CH2:22][CH2:21]4)[CH3:38])[CH3:14])[O:39]1.[C:64](=[O:65])([CH3:63])[O:66][C:60](=[O:62])[CH3:61]>>[CH3:63][C:64](=[O:65])[OH:66].[CH3:45][C:44]([CH3:46])([CH3:47])[C:43](=[O:48])[O:42][CH2:41][CH:40]1[CH:49]([O:50][CH2:51][C:52]=2[CH:57]=[CH:56][CH:55]=[CH:54][CH:53]=2)[CH:58]([O:59][C:60]([CH3:61])=[O:62])[CH:9]([O:8][CH2:1][C:2]3=[CH:3][CH:4]=[CH:5][CH:6]=[CH:7]3)[CH:10]([O:11][CH2:12][CH:13]([CH2:15][CH2:16][CH2:17][CH:18]([CH3:19])[CH:20]4[C:37]5([CH:23]([CH:24]6[CH2:25][CH2:26][CH:27]7[C:32]([CH3:33])([CH:34]6[CH2:35][CH2:36]5)[CH2:31][CH2:30][CH2:29][CH2:28]7)[CH2:22][CH2:21]4)[CH3:38])[CH3:14])[O:39]1"
+  },
+  {
+    "id": 575,
+    "source": "bridge",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [
+      "Cl"
+    ],
+    "output_rxn": "C(O)(CN)CCl.Cl.C(=O)(C)OC(=O)C.C(=O)(C)OC(=O)C.[H].[H]>>O.ClCC(CNC(=O)C)OC(C)=O.CC(=O)O.OCCCl",
+    "expected_rxn": ""
+  },
+  {
+    "id": 578,
+    "source": "SynRBL",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [
+      "O",
+      "[Na+]",
+      "[OH-]"
+    ],
+    "exp_spectators": [
+      "[OH:46][OH:47]",
+      "[OH-:49]",
+      "[Na+:48]"
+    ],
+    "problematic_species": [
+      "O",
+      "O",
+      "O",
+      "O",
+      "O",
+      "[H]",
+      "[H]",
+      "O",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "O.OO.S1C(=CC=C1C2=CC=C(C=C2)C#N)CC3=C(C=CC(C4OC(C(OC(=O)C)C(OC(=O)C)C4OC(=O)C)COC(C)=O)=C3)Cl.[Na+].[OH-].O.O.O.O.[H].[H]>>OCC1OC(C(C(C1O)O)O)C=2C=CC(Cl)=C(C=2)CC=3SC(=CC=3)C4=CC=C(C=C4)C(N)=O.CC(=O)O.CC(=O)O.CC(=O)O.CC(=O)O.[Na+].[OH-].O.O",
+    "expected_rxn": "[OH2:45].[OH:46][OH:47].[S:23]1[C:11](=[CH:12][CH:13]=[C:14]1[C:15]2=[CH:16][CH:17]=[C:18]([CH:21]=[CH:22]2)[C:19]#[N:20])[CH2:10][C:9]3=[C:24]([CH:26]=[CH:27][C:7]([CH:6]4[O:28][CH:29]([CH:35]([O:36][C:37](=[O:39])[CH3:38])[CH:40]([O:41][C:42](=[O:44])[CH3:43])[CH:5]4[O:4][C:2](=[O:3])[CH3:1])[CH2:30][O:31][C:32]([CH3:33])=[O:34])=[CH:8]3)[Cl:25].[Na+:48].[OH-:49].O.O.O.O>>[OH:31][CH2:30][CH:29]1[O:28][CH:6]([CH:5]([CH:40]([CH:35]1[OH:36])[OH:41])[OH:4])[C:7]=2[CH:27]=[CH:26][C:24]([Cl:25])=[C:9]([CH:8]=2)[CH2:10][C:11]=3[S:23][C:14](=[CH:13][CH:12]=3)[C:15]4=[CH:16][CH:17]=[C:18]([CH:21]=[CH:22]4)[C:19]([NH2:20])=[O:47].O[C:32]([CH3:33])=[O:34].O[C:37]([CH3:38])=[O:39].O[CH2:1][CH:2]=[O:3].O[CH2:43][CH:42]=[O:44].[Na+:48].[OH-:49].[OH:46][OH:47]"
+  },
+  {
+    "id": 581,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]']",
+    "main_overlap": false,
+    "out_spectators": [
+      "CI",
+      "[H-]",
+      "[Na+]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(=O)OCC.CC(C)(C)OC(=O)CCC=1C(=CC(=CC=1)C(=O)N2C3=C(C=CC=C3)NC4=C(C2)C=NN4C)C.IC.[H-].[Na+].[O]>>CC(C)(C)OC(=O)CCC=1C(=CC(=CC=1)C(=O)N2C=3C=CC=CC=3N(C)C=4N(N=CC=4C2)C)C.CC(=O)OCO.CI.[H-].[Na+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 586,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['O']",
+    "main_overlap": false,
+    "out_spectators": [
+      "Cl"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O"
+    ],
+    "borderline_species": [
+      "Cl",
+      "Cl",
+      "F"
+    ],
+    "output_rxn": "Cl.FC(F)(F)C(C(N)C=1C=CC=CC=1)O.FC(F)(F)C(O)CN1C(=O)N(CC(=O)NC(C=2C(=CC=CC=2)F)CCOC(N)=O)N=C1C=3C=CC(=CC=3)Cl.O.FF>>FC(F)(F)C(C(C1=CC=CC=C1)NC(=O)CN2C(=O)N(CC(O)C(F)(F)F)C(C=3C=CC(=CC=3)Cl)=N2)O.Cl.F.NC(=O)O.NC(c1ccccc1)C(O)C(F)F",
+    "expected_rxn": ""
+  },
+  {
+    "id": 587,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['C', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "C",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "FC(F)(F)C(O)CN1C(=O)N(N=C1C=2C=CC(=CC=2)Cl)CC(NC(C3=CC=CC=C3C)CCO)=O.FC(F)(F)CC(N)C1=CC=CC=C1.[H+].[H+].[F-].[F-]>>FC(F)(F)C(CN1C(C=2C=CC(=CC=2)Cl)=NN(CC(=O)NC(C=3C=CC=CC=3)CC(F)(F)F)C1=O)O.C.NC(CC(F)F)c1ccccc1.O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 588,
+    "source": "exhaustive_allocation",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', '[H]', '[H]', '[H]', '[H]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [
+      "O=C(O)Cn1nc(-c2ccc(Cl)cc2)n(C2CC2)c1=O"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [
+      "F",
+      "F",
+      "F"
+    ],
+    "output_rxn": "C1CC1N2C(=O)N(CC(O)=O)N=C2C3=CC=C(C=C3)Cl.FC(F)(F)C(O)CN1C(C=2C=CC(=CC=2)Cl)=NN(CC(NC(CCO)C=3C=CC=CC=3Cl)=O)C1=O.[H].[H].[H].[H].[H].[H]>>C1CC1N2C(C=3C=CC(=CC=3)Cl)=NN(CC(NC(CCO)C=4C=CC=CC=4Cl)=O)C2=O.F.F.F.O.C1CC1N2C(=O)N(CC(O)=O)N=C2C3=CC=C(C=C3)Cl",
+    "expected_rxn": ""
+  },
+  {
+    "id": 590,
+    "source": "template_matching",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [
+      "c1ccc(P(c2ccccc2)c2ccc3ccccc3c2-c2c(P(c3ccccc3)c3ccccc3)ccc3ccccc23)cc1",
+      "CC(C)(C)[O-]",
+      "[Na+]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "C1=C(C(Br)=NC=C1)C2=CC=C(C=C2)F.C1=CC=CC(=C1)P(C=2C=CC=CC=2)C=3C(C4=C(C=CC=5C=CC=CC4=5)P(C=6C=CC=CC=6)C=7C=CC=CC=7)=C8C(=CC=3)C=CC=C8.C1CNCCN1.CC(C)(C)[O-].[Na+]>>C1CN(CCN1)C2=NC=CC=C2C=3C=CC(F)=CC=3.[Br-].[H+].C1=CC=CC(=C1)P(C=2C=CC=CC=2)C=3C(C4=C(C=CC=5C=CC=CC4=5)P(C=6C=CC=CC=6)C=7C=CC=CC=7)=C8C(=CC=3)C=CC=C8.CC(C)(C)[O-].[Na+]",
+    "expected_rxn": "[CH2:3]1[CH2:4][NH:5][CH2:6][CH2:7][NH:2]1.[CH:11]1=[C:12]([C:1]([Br:20])=[N:8][CH:9]=[CH:10]1)[C:13]2=[CH:14][CH:15]=[C:16]([CH:18]=[CH:19]2)[F:17]>>[CH2:4]1[CH2:3][N:2]([CH2:7][CH2:6][NH:5]1)[C:1]2=[N:8][CH:9]=[CH:10][CH:11]=[C:12]2[C:13]=3[CH:19]=[CH:18][C:16]([F:17])=[CH:15][CH:14]=3.[H+].[Br-:20]"
+  },
+  {
+    "id": 591,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "G",
+    "sub_type": "h_radical_only",
+    "note": "仅含[H]自由基副产物(2个)",
+    "main_overlap": false,
+    "out_spectators": [
+      "CCOC(=O)N=NC(=O)OCC",
+      "Cl"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]"
+    ],
+    "borderline_species": [
+      "Cl",
+      "Cl"
+    ],
+    "output_rxn": "C1CC1N(C2CC2)C(C=3N(C=4C(=C5N(C=NC5=C(N=C=S)N=4)C)C=3)CC)=O.CC(C)N(C(C)C)CC.CC(N)=N.Cl.N(=NC(=O)OCC)C(=O)OCC.[H].[H]>>C1CC1N(C2CC2)C(C3=CC=4C(N3CC)=NC(=C5C=4N(C)C=N5)NC6=NC(C)=NS6)=O.CCC.CCC.CCN.CCOC(=O)N=NC(=O)OCC.Cl",
+    "expected_rxn": ""
+  },
+  {
+    "id": 608,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]', '[O]', 'O', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]",
+      "[O]",
+      "O",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C(C)N(CC)CC.CC(C)(C)OC(NCCNC1=CC(=NC(=C1CO)N)C=2C(OCC=3C=CC(=CC=3)OC)=CC=CC=2OCC4CC4)=O.ClC(Cl)(Cl)OC(OC(Cl)(Cl)Cl)=O.[O].[O]>>CC(C)(C)OC(NCCNC=1C2=C(N=C(C3=C(C=CC=C3OCC=4C=CC(=CC=4)OC)OCC5CC5)C=1)NC(=O)OC2)=O.CCN(CC)CC(OC(Cl)(Cl)Cl)OC(Cl)(Cl)Cl.O.O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 609,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]', '[O]', 'O', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]",
+      "[O]",
+      "O",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C(C)N(CC)CC.CC(C)(C)OC(NC(CC1=CC=CC=C1)C=2C(CO)=C(N)N=C(C=2)C=3C=CC=CC=3OCC=4C=CC=CC=4)=O.ClC(Cl)(Cl)OC(OC(Cl)(Cl)Cl)=O.[O].[O]>>CC(C)(C)OC(NC(C=1C=2COC(NC=2N=C(C=3C=CC=CC=3OCC4=CC=CC=C4)C=1)=O)CC=5C=CC=CC=5)=O.CCN(CC)CC(OC(Cl)(Cl)Cl)OC(Cl)(Cl)Cl.O.O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 610,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]']",
+    "main_overlap": false,
+    "out_spectators": [
+      "[Li+]",
+      "CI"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(C)(C)OC(=O)N1CCCC(C1)C(OCC)=O.CC(C)[N-]C(C)C.IC.[Li+].[O]>>CC(C)(C)OC(N1CC(C)(C(=O)OCC)CCC1)=O.CC(C)[N-]C(C)O.CI.[Li+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 612,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['O', '[H]', '[H]', '[H]', '[H]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [
+      "O=C([O-])O",
+      "O",
+      "[Na+]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [
+      "Cl",
+      "Cl"
+    ],
+    "output_rxn": "CC(C)=O.ClC1(Cl)C(Cl)=C(Cl)C2(C)OC1C=C2.O.[Na+].[O-]C(=O)O.[H].[H].[H].[H]>>CC12C(Cl)=C(Cl)C(=O)C(C=C1)O2.CCC.Cl.Cl.O.O=C([O-])O.[Na+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 619,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]']",
+    "main_overlap": false,
+    "out_spectators": [
+      "CI",
+      "[H-]",
+      "[Na+]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(=O)OCC.CC(C)CC(NC(=O)OCC1=NC=CC=C1)C(=O)OC.IC.[H-].[Na+].[O]>>CC(C)CC(N(C(=O)OCC1=NC=CC=C1)C)C(=O)OC.CC(=O)OCO.CI.[H-].[Na+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 621,
+    "source": "bridge",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [
+      "[cH:34]1[cH:35][cH:36][c:37]([P:38]([c:39]2[cH:40][cH:41][cH:42][cH:43][cH:44]2)[c:45]2[cH:46][cH:47][cH:48][cH:49][cH:50]2)[cH:51][cH:52]1",
+      "[CH3:19][CH:20]([CH3:21])[O:22][C:23](=[O:24])[N:25]=[N:26][C:27](=[O:28])[O:29][CH:30]([CH3:31])[CH3:32]"
+    ],
+    "problematic_species": [
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C1=CC(=CC=N1)CO.C(C=1C=CC=C(O)C=1)(OC)=O>>O.C1(=CC=CC(=C1)C(OC)=O)OCC2=CC=NC=C2",
+    "expected_rxn": "[C:7]([C:6]=1[CH:5]=[CH:4][CH:3]=[C:2]([OH:1])[CH:11]=1)([O:9][CH3:10])=[O:8].[CH:17]1=[CH:18][C:13](=[CH:14][CH:15]=[N:16]1)[CH2:12][OH:33].[CH:44]1=[CH:43][CH:42]=[CH:41][CH:40]=[C:39]1[P:38]([C:45]=2[CH:50]=[CH:49][CH:48]=[CH:47][CH:46]=2)[C:37]=3[CH:51]=[CH:52][CH:34]=[CH:35][CH:36]=3.[CH3:32][CH:30]([CH3:31])[O:29][C:27](=[O:28])[N:26]=[N:25][C:23]([O:22][CH:20]([CH3:19])[CH3:21])=[O:24]>>[C:2]1(=[CH:3][CH:4]=[CH:5][C:6](=[CH:11]1)[C:7]([O:9][CH3:10])=[O:8])[O:1][CH2:12][C:13]2=[CH:14][CH:15]=[N:16][CH:17]=[CH:18]2.[CH3:19][CH:20]([CH3:21])[O:22][C:23](=[O:24])[N:25]=[N:26][C:27](=[O:28])[O:29][CH:30]([CH3:31])[CH3:32].[OH2:33].[cH:34]1[cH:35][cH:36][c:37]([P:38]([c:39]2[cH:40][cH:41][cH:42][cH:43][cH:44]2)[c:45]2[cH:46][cH:47][cH:48][cH:49][cH:50]2)[cH:51][cH:52]1"
+  },
+  {
+    "id": 622,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "c1ccc(P(c2ccccc2)c2ccccc2)cc1",
+      "CC(C)OC(=O)N=NC(=O)OC(C)C"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C1=CC=CC=C1P(C=2C=CC=CC=2)C=3C=CC=CC=3.C=1C(=CC=C(C=1)C(OC)=O)O.CC(C)OC(=O)N=NC(OC(C)C)=O.CN(C)CCCO>>CN(C)CCCOC=1C=CC(C(OC)=O)=CC=1.CC(C)OC(=O)N=NC(=O)OC(C)C.O.c1ccc(P(c2ccccc2)c2ccccc2)cc1",
+    "expected_rxn": "C=1C(=CC=C(C=1)C(OC)=O)O.CN(C)CCCO>>CN(C)CCCOC=1C=CC(C(OC)=O)=CC=1.O"
+  },
+  {
+    "id": 623,
+    "source": "template_matching",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "c1ccc(P(c2ccccc2)c2ccccc2)cc1",
+      "CC1CCCO1",
+      "CC(C)OC(=O)N=NC(=O)OC(C)C"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C1=CC=CC=C1P(C=2C=CC=CC=2)C=3C=CC=CC=3.C1CC(CCN1C=2C=CC(O)=CC=2)C=3C=CC(C(C)NC(C)=O)=CC=3.C1CC(OC1)C.CC(C)OC(=O)N=NC(OC(C)C)=O.CC1CC1CO>>C1CC(CCN1C=2C=CC(=CC=2)OCC3C(C)C3)C=4C=CC(C(C)NC(C)=O)=CC=4.O.C1=CC=CC=C1P(C=2C=CC=CC=2)C=3C=CC=CC=3.C1CC(OC1)C.CC(C)OC(=O)N=NC(OC(C)C)=O",
+    "expected_rxn": "CC1CC1CO.C1CC(CCN1C=2C=CC(O)=CC=2)C=3C=CC(C(C)NC(C)=O)=CC=3>>C1CC(CCN1C=2C=CC(=CC=2)OCC3C(C)C3)C=4C=CC(C(C)NC(C)=O)=CC=4.O"
+  },
+  {
+    "id": 626,
+    "source": "bridge",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', '[H]', '[H]', '[H]', '[H]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[O-]C([O-])=O.C=1(C=CC=C(Cl)C=1N)C(=O)O.[H].[H].[H].[H].[H].[H]>>[OH-].[OH-].O.C(C=1C=CC=C(Cl)C=1N)(OC)=O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 627,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]']",
+    "main_overlap": false,
+    "out_spectators": [
+      "[K+]",
+      "O=C([O-])[O-]",
+      "COS(=O)(=O)OC"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C=1(C=CC=C(Cl)C=1N)C(=O)O.CC(C)CC(=O)C.O=S(=O)(OC)OC.[K+].[K+].[O-]C([O-])=O.[O]>>C(C=1C=CC=C(Cl)C=1N)(OC)=O.CC(C)CC(=O)O.COS(=O)(=O)OC.O=C([O-])[O-].[K+].[K+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 636,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', '[H]', '[H]', '[H]', '[H]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C(C)N(CC)CC.C1=CC=CC(=C1)P(C2=CC=CC=C2)(=O)N=[N+]=[N-].O=C(O)C1=C(Cl)N=C(Cl)S1.[H].[H].[H].[H].[H].[H]>>[N+](=NC(=O)C1=C(Cl)N=C(Cl)S1)=[N-].CC.CC.CC.NP(=O)(c1ccccc1)c1ccccc1.O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 638,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]']",
+    "main_overlap": false,
+    "out_spectators": [
+      "[Li+]",
+      "CI"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C(C1=CC=CC=C1)N2CCC(=O)C(C2)C.CC(C)[N-]C(C)C.IC.[Li+].[O]>>CC1CN(CC(C)C1=O)CC=2C=CC=CC=2.CC(C)[N-]C(C)O.CI.[Li+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 646,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O",
+      "CCO",
+      "NN"
+    ],
+    "exp_spectators": [
+      "O",
+      "CCO",
+      "NN"
+    ],
+    "problematic_species": [
+      "O",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C(C)O.C1(C=2C(C(=O)N1CCOCCOCCOCCC(=O)NC=3C=CC=C(C4C5=CC(Cl)=CC(Cl)=C5CN(C4)C)C=3)=CC=CC=2)=O.NN.O.[H].[H].[H].[H]>>ClC1=CC(=C2CN(CC(C2=C1)C=3C=C(C=CC=3)NC(=O)CCOCCOCCOCCN)C)Cl.CCO.NN.O.O=Cc1ccccc1C=O",
+    "expected_rxn": "C(C)O.C1(C=2C(C(=O)N1CCOCCOCCOCCC(=O)NC=3C=CC=C(C4C5=CC(Cl)=CC(Cl)=C5CN(C4)C)C=3)=CC=CC=2)=O.NN.O.O.O>>ClC1=CC(=C2CN(CC(C2=C1)C=3C=C(C=CC=3)NC(=O)CCOCCOCCOCCN)C)Cl.O=C(O)c1ccccc1C(=O)O.C(C)O.NN.O"
+  },
+  {
+    "id": 648,
+    "source": "SynRBL",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O",
+      "NN"
+    ],
+    "exp_spectators": [
+      "O",
+      "NN"
+    ],
+    "problematic_species": [
+      "O",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C=1C=CC=C2C(=O)N(C(C=12)=O)CC(C)=CC3=CC(F)=C(C(F)=C3)OC=4C=CC=CC=4.NN.O.[H].[H].[H].[H]>>C(=CC=1C=C(F)C(=C(F)C=1)OC=2C=CC=CC=2)(C)CN.NN.O.O=Cc1ccccc1C=O",
+    "expected_rxn": "C=1C=CC=C2C(=O)N(C(C=12)=O)CC(C)=CC3=CC(F)=C(C(F)=C3)OC=4C=CC=CC=4.NN.O.O.O>>C(=CC=1C=C(F)C(=C(F)C=1)OC=2C=CC=CC=2)(C)CN.O=C(O)c1ccccc1C(=O)O.NN.O"
+  },
+  {
+    "id": 649,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [
+      "O",
+      "NN"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "NN.O.O(CC)P(OCC)(=O)CCN1C(=O)C2=CC=CC=C2C1=O.[H].[H].[H].[H]>>C(OP(OCC)(CCN)=O)C.NN.O.O=Cc1ccccc1C=O",
+    "expected_rxn": "[OH2:14].[O:5]([CH2:6][CH3:7])[P:4]([O:8][CH2:9][CH3:10])(=[O:11])[CH2:3][CH2:2][N:1]1[C:16](=[O:15])[C:17]2=[CH:18][CH:19]=[CH:20][CH:21]=[C:22]2[C:23]1=[O:24].[NH2:12][NH2:13]>>[CH2:6]([O:5][P:4]([O:8][CH2:9][CH3:10])([CH2:3][CH2:2][NH2:1])=[O:11])[CH3:7].O=C1c2ccccc2C(=O)N1O.N"
+  },
+  {
+    "id": 652,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "CCN(C(C)C)C(C)C"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "CC(C)(C)OC(NCC=1C=NC(=C(C(OCC)=O)C=1)C(F)F)=O.CC(C)C(Cl)=O.CC(C)N(C(C)C)CC>>CC(C)C(NCC=1C=NC(C(F)F)=C(C(OCC)=O)C=1)=O.CC(C)(C)OC(=O)Cl.CCN(C(C)C)C(C)C",
+    "expected_rxn": "CC(C)(C)OC(NCC=1C=NC(=C(C(OCC)=O)C=1)C(F)F)=O.CC(C)C(Cl)=O>>CC(C)(C)OC(=O)Cl.CC(C)C(NCC=1C=NC(C(F)F)=C(C(OCC)=O)C=1)=O"
+  },
+  {
+    "id": 656,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]']",
+    "main_overlap": false,
+    "out_spectators": [
+      "[Li+]",
+      "CI"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC(C)(C)OC(CCC(O)=O)=O.CC(C)[N-]C(C)C.IC.[Li+].[O]>>CC(C)(C)OC(=O)C(CC(O)=O)C.CC(C)[N-]C(C)O.CI.[Li+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 671,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[O]']",
+    "main_overlap": false,
+    "out_spectators": [
+      "[Na+]",
+      "CI"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[O]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C1CC(CCN1C=2N=CC(CC)=CN=2)C3C(C3)C(OCC4=CC=C(C=C4)Br)CO.C[Si](C)(C)[N-][Si](C)(C)C.IC.[Na+].[O]>>C1CC(CCN1C=2N=CC(CC)=CN=2)C3CC3C(COC)OCC=4C=CC(=CC=4)Br.CI.C[Si](C)(C)[N-][Si](C)(C)O.[Na+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 685,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "CCN(CC)CC",
+      "[Na+]",
+      "O=C([O-])[O-]",
+      "Cl",
+      "CCN(C(C)C)C(C)C"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [
+      "Cl",
+      "Cl",
+      "Cl",
+      "Cl",
+      "Cl"
+    ],
+    "output_rxn": "C(C)N(CC)CC.C1CC(CCN1)N2C(=O)NC=3N=CC=CC2=3.C=1(C=CC=CC=1)C2CN(CCOC)C(=O)C(CC2)N.CC(C)N(C(C)C)CC.Cl.Cl.[N+]([O-])(=O)C1=CC=C(OC(Cl)=O)C=C1.[Na+].[Na+].[O-]C([O-])=O>>C1CC(CCN1C(=O)NC2CCC(CN(C2=O)CCOC)C=3C=CC=CC=3)N4C(=O)NC=5N=CC=CC4=5.CCN(C(C)C)C(C)C.CCN(CC)CC.Cl.Cl.Cl.O=C([O-])[O-].O=[N+]([O-])c1ccc(O)cc1.[Na+].[Na+]",
+    "expected_rxn": "C=1(C=CC=CC=1)C2CN(CCOC)C(=O)C(CC2)N.[N+]([O-])(=O)C1=CC=C(OC(Cl)=O)C=C1.C1CC(CCN1)N2C(=O)NC=3N=CC=CC2=3>>Cl.C1CC(CCN1C(=O)NC2CCC(CN(C2=O)CCOC)C=3C=CC=CC=3)N4C(=O)NC=5N=CC=CC4=5.O=[N+]([O-])c1ccc(O)cc1"
+  },
+  {
+    "id": 692,
+    "source": "SynRBL",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [
+      "[K+]",
+      "O=C(O)C(F)(F)F",
+      "O",
+      "[OH-]"
+    ],
+    "exp_spectators": [
+      "[K+:42]",
+      "[OH:20][OH:41]",
+      "[OH-:43]"
+    ],
+    "problematic_species": [
+      "O",
+      "[H]",
+      "[H]",
+      "O",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "FC(F)(F)C(O)=O.N1=C(C(=CC(=C1OCC=2C=CC(=C(F)C=2)F)C#N)C=3C=CC(=CC=3)Cl)C=4C=CC=CC=4Cl.OO.[K+].[OH-].O.[H].[H]>>N1=C(C(C=2C=CC(=CC=2)Cl)=CC(C(=O)N)=C1OCC=3C=CC(=C(F)C=3)F)C=4C=CC=CC=4Cl.O=C(O)C(F)(F)F.[K+].[OH-].O.O",
+    "expected_rxn": "[F:38][C:37]([F:40])([F:39])[C:35]([OH:36])=[O:34].[N:5]1=[C:4]([C:22](=[CH:21][C:17](=[C:6]1[O:7][CH2:8][C:9]=2[CH:16]=[CH:15][C:13](=[C:11]([F:12])[CH:10]=2)[F:14])[C:18]#[N:19])[C:23]=3[CH:29]=[CH:28][C:26](=[CH:25][CH:24]=3)[Cl:27])[C:3]=4[CH:30]=[CH:31][CH:32]=[CH:33][C:2]=4[Cl:1].[OH:41][OH:20].[K+:42].[OH-:43].O>>[N:5]1=[C:4]([C:22]([C:23]=2[CH:29]=[CH:28][C:26](=[CH:25][CH:24]=2)[Cl:27])=[CH:21][C:17]([C:18](=[O:20])[NH2:19])=[C:6]1[O:7][CH2:8][C:9]=3[CH:16]=[CH:15][C:13](=[C:11]([F:12])[CH:10]=3)[F:14])[C:3]=4[CH:30]=[CH:31][CH:32]=[CH:33][C:2]=4[Cl:1].O[C:35](=[O:34])[C:37]([F:38])([F:39])[F:40].[K+:42].[OH-:43].[OH:20][OH:41]"
+  },
+  {
+    "id": 693,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [
+      "C=COC(C)=O",
+      "O=C([O-])[O-]",
+      "[Na+]",
+      "CCCCCCCCO"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "C(CCCCCCC)OC=C.C(CCCO)CCCC.C(CCCOC(=O)C)CCCC.CC(OC=C)=O.[Na+].[Na+].[O-]C([O-])=O.OO>>C(CCCOC(C)OC(=O)C)CCCC.C=COC(C)=O.CC=O.CCCCCCCCO.CCCCCCO.O=C([O-])[O-].[Na+].[Na+]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 701,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[OH2:30]",
+      "[IH:29]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[F:19][C:18]([F:20])([F:21])[C:17]=1[C:15]([Br:27])=[CH:14][C:13]2=[C:12]([CH:22]=1)[N:11]3[CH:24]([CH2:26][N:8]([CH2:9][CH:10]3[CH2:23]2)[C:6](=[O:7])[O:5][C:1]([CH3:2])([CH3:3])[CH3:4])[CH3:25].[I:29][CH3:28].[CH3:16][Li:31].[OH2:30]>>[Br:27][CH3:28].[I:29][H].[CH3:2][C:1]([CH3:3])([CH3:4])[O:5][C:6](=[O:7])[N:8]1[CH2:26][CH:24]([CH3:25])[N:11]2[CH:10]([CH2:23][C:13]3=[C:12]2[CH:22]=[C:17]([C:18]([F:19])([F:20])[F:21])[C:15](=[CH:14]3)[CH3:16])[CH2:9]1.[Li:31][OH:30]",
+    "expected_rxn": "[H][H].FC(F)(F)C=1C(Br)=CC2=C(C=1)N3C(CN(CC3C2)C(=O)OC(C)(C)C)C.IC>>[I-].[Br-].CC(C)(C)OC(=O)N1CC(C)N2C(CC3=C2C=C(C(F)(F)F)C(=C3)C)C1.[H+].[H+]"
+  },
+  {
+    "id": 703,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [
+      "CC(=O)Cl"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "C(C)(Cl)=O.CN(C)C(C)=O.N(C=1C=CC=C(C=2SC=3C=CC=CC=3C(=O)N=2)N=1)C>>CC(=O)N(C)C=1C=CC=C(C=2SC=3C=CC=CC=3C(=O)N=2)N=1.CC(=O)Cl.CNC",
+    "expected_rxn": ""
+  },
+  {
+    "id": 713,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [
+      "CN(C)CCO",
+      "C[CH2][Zn][CH2]C"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "C(C)[Zn]CC.C(CCC)CC.CN(C)CCO.O=C(C1=CC=C(N=C1)Cl)C>>C=1(N=CC(=CC=1)C(=O)C)CC.CCCCCl.CN(C)CCO.C[CH2][Zn][CH2]C",
+    "expected_rxn": ""
+  },
+  {
+    "id": 717,
+    "source": "template_matching",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [
+      "COc1ccc(C(=O)Nc2ccccc2CCCC2CCCCN2C)cc1",
+      "Cl",
+      "[Na+]",
+      "[OH-]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [
+      "Cl",
+      "Cl"
+    ],
+    "output_rxn": "C(C=CC=1C=CC=CC=1)(Cl)=O.C(CCC1=C(C=CC=C1)N)C2CCCCN2C.Cl.N(C(=O)C=1C=CC(=CC=1)OC)C2=CC=CC=C2CCCC3CCCCN3C.[Na+].[OH-]>>C(CCC1=C(NC(C=CC=2C=CC=CC=2)=O)C=CC=C1)C3CCCCN3C.[Cl-].[H+].Cl.N(C(=O)C=1C=CC(=CC=1)OC)C2=CC=CC=C2CCCC3CCCCN3C.[Na+].[OH-]",
+    "expected_rxn": "[C:9]([CH:8]=[CH:7][C:6]=1[CH:5]=[CH:4][CH:3]=[CH:2][CH:1]=1)([Cl:56])=[O:10].[OH-:58].[CH2:16]([CH2:15][CH2:14][C:13]1=[C:12]([CH:27]=[CH:26][CH:25]=[CH:24]1)[NH2:11])[CH:17]2[CH2:23][CH2:22][CH2:21][CH2:20][N:18]2[CH3:19].[Na+:57]>>[OH2:58].[Cl-:56].[Na+].[CH2:16]([CH2:15][CH2:14][C:13]1=[C:12]([NH:11][C:9]([CH:8]=[CH:7][C:6]=2[CH:1]=[CH:2][CH:3]=[CH:4][CH:5]=2)=[O:10])[CH:27]=[CH:26][CH:25]=[CH:24]1)[CH:17]3[CH2:23][CH2:22][CH2:21][CH2:20][N:18]3[CH3:19]"
+  },
+  {
+    "id": 724,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [
+      "[K+:45]",
+      "[K+:44]",
+      "[OH:33][OH:43]"
+    ],
+    "problematic_species": [
+      "[OH2:42]",
+      "[H]",
+      "[H]",
+      "O",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[K+:44].[OH:33][OH:43].[OH2:42].[O-:48][C:47]([O-:46])=[O:49].[H].[H].[F:23][C:22]([F:24])([F:25])[C:21]=1[CH:20]=[CH:19][C:7]([C:8]=2[CH:18]=[C:14]([CH:13]=[CH:12][C:9]=2[O:10][CH3:11])[CH:15]([CH3:16])[CH3:17])=[C:6]([CH2:5][N:4]([C:3](=[O:41])[O:2][CH3:1])[CH2:27][C:28]3=[CH:29][C:30](=[CH:34][C:35]([C:36]([F:37])([F:38])[F:39])=[CH:40]3)[C:31]#[N:32])[CH:26]=1.[K+:45]>>[K+].[K+].O.O.[O-][C]([O-])=O.[F:37][C:36]([F:38])([F:39])[C:35]1=[CH:40][C:28]([CH2:27][N:4]([CH2:5][C:6]2=[C:7]([CH:19]=[CH:20][C:21]([C:22]([F:24])([F:25])[F:23])=[CH:26]2)[C:8]=3[CH:18]=[C:14]([CH:13]=[CH:12][C:9]=3[O:10][CH3:11])[CH:15]([CH3:16])[CH3:17])[C:3](=[O:41])[O:2][CH3:1])=[CH:29][C:30]([C:31](=[O:33])[NH2:32])=[CH:34]1",
+    "expected_rxn": "[F:23][C:22]([F:24])([F:25])[C:21]=1[CH:20]=[CH:19][C:7]([C:8]=2[CH:18]=[C:14]([CH:13]=[CH:12][C:9]=2[O:10][CH3:11])[CH:15]([CH3:16])[CH3:17])=[C:6]([CH2:5][N:4]([C:3](=[O:41])[O:2][CH3:1])[CH2:27][C:28]3=[CH:29][C:30](=[CH:34][C:35]([C:36]([F:37])([F:38])[F:39])=[CH:40]3)[C:31]#[N:32])[CH:26]=1.[OH2:42].[OH:33][OH:43].[K+:44].[K+:45].[O-:48][C:47]([O-:46])=[O:49].[H+]>>[F:37][C:36]([F:38])([F:39])[C:35]1=[CH:40][C:28]([CH2:27][N:4]([CH2:5][C:6]2=[C:7]([CH:19]=[CH:20][C:21]([C:22]([F:24])([F:25])[F:23])=[CH:26]2)[C:8]=3[CH:18]=[C:14]([CH:13]=[CH:12][C:9]=3[O:10][CH3:11])[CH:15]([CH3:16])[CH3:17])[C:3](=[O:41])[O:2][CH3:1])=[CH:29][C:30]([C:31](=[O:33])[NH2:32])=[CH:34]1.O[C:47]([O-:48])=[O:49].[K+:44].[K+:45].[OH:33][OH:43]"
+  },
+  {
+    "id": 746,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "[BrH:9]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[CH2:22]1[CH2:23][CH:21]1[C:20]#[C:19][C:18]=2[C:13](=[CH:14][CH:15]=[CH:16][CH:17]=2)[N+:11](=[O:12])[O-:10].[H].[H].[H].[H].[F:7][C:6]([F:8])([Br:9])[C:4]([O:3][CH2:2][CH3:1])=[O:5]>>[Br:9][H:0].O.[F:7][C:6]([F:8])([C:20]1([NH:11][C:13]=2[C:18](=[CH:17][CH:16]=[CH:15][CH:14]=2)[C:19]1=[O:12])[CH:21]3[CH2:22][CH2:23]3)[C:4]([O:3][CH2:2][CH3:1])=[O:5]",
+    "expected_rxn": "[CH2:22]1[CH2:23][CH:21]1[C:20]#[C:19][C:18]=2[C:13](=[CH:14][CH:15]=[CH:16][CH:17]=2)[N+:11](=[O:12])[O-:10].[F:7][C:6]([F:8])([Br:9])[C:4]([O:3][CH2:2][CH3:1])=[O:5].[H].[H]>>[F:7][C:6]([F:8])([C:20]1([NH:11][C:13]=2[C:18](=[CH:17][CH:16]=[CH:15][CH:14]=2)[C:19]1=[O:12])[CH:21]3[CH2:22][CH2:23]3)[C:4]([O:3][CH2:2][CH3:1])=[O:5].[Br:9][OH:10]"
+  },
+  {
+    "id": 771,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[N+](=O)([O-])[O-].[C:9]=1([CH:8]=[C:6]([OH:7])[C:5]2=[C:12]([N:11]=1)[CH2:13][CH:2]([CH3:1])[CH2:3][CH2:4]2)[OH:10]>>[C:12]=12[N:11]=[C:9]([OH:10])[C:8](=[C:6]([OH:7])[C:5]=1[CH2:4][CH2:3][CH:2]([CH3:1])[CH2:13]2)[N+:14]([O-:15])=[O:16].[OH-]",
+    "expected_rxn": "[N+](=O)([O-])[O-].[C:9]=1([CH:8]=[C:6]([OH:7])[C:5]2=[C:12]([N:11]=1)[CH2:13][CH:2]([CH3:1])[CH2:3][CH2:4]2)[OH:10]>>[OH:17].[C:12]=12[N:11]=[C:9]([OH:10])[C:8](=[C:6]([OH:7])[C:5]=1[CH2:4][CH2:3][CH:2]([CH3:1])[CH2:13]2)[N+:14]([O-:15])=[O:16]"
+  },
+  {
+    "id": 774,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[CH2:22]1[CH2:21][N:20]([CH2:25][CH2:24][NH:23]1)[CH:19]=[O:18].[H+].[CH:8]1=[C:7]([N+:6]=2[N:5]3[CH2:13][CH2:14][CH2:15][O:16][C:4]3=[CH:3][C:2]=2[CH3:1])[CH:12]=[CH:11][CH:10]=[CH:9]1>>[CH2:22]1[CH2:21][N:20]([CH2:25][CH2:24][N:23]1[CH2:15][CH2:14][CH2:13][N:5]2[C:4](=[O:16])[CH2:3][CH:2]([N:6]2[C:7]=3[CH:12]=[CH:11][CH:10]=[CH:9][CH:8]=3)[CH3:1])[CH:19]=[O:18]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 821,
+    "source": "bridge",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]"
+    ],
+    "borderline_species": [
+      "Br"
+    ],
+    "output_rxn": "Br[Mg]OC(=O)C(Br)C.[H].[H].Br[Mg]C1=CC2=CC=C(C=C2C=C1)OC>>OC(=O)C(C1=CC2=CC=C(C=C2C=C1)OC)C.[Br][Mg][Mg][Br].Br",
+    "expected_rxn": "[Br:8][Mg:7][O:6][C:4](=[O:5])[CH:2]([Br:3])[CH3:1].[Br:18][Mg:17][C:16]1=[CH:15][C:14]2=[CH:13][CH:12]=[C:11]([CH:22]=[C:21]2[CH:20]=[CH:19]1)[O:10][CH3:9].[H+]>>[Br-].[Br-].[Br-].[Mg+2].[Mg+2].[OH:6][C:4](=[O:5])[CH:2]([C:16]1=[CH:15][C:14]2=[CH:13][CH:12]=[C:11]([CH:22]=[C:21]2[CH:20]=[CH:19]1)[O:10][CH3:9])[CH3:1]"
+  },
+  {
+    "id": 828,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "[CH3:1][O:2][P:3]([O:5][CH3:6])([CH:7]=[N+:8]=[N-:9])=[O:4].[C:22]12([CH:24]=[O:25])[C:16]([CH3:17])([CH2:18][CH:19]3[O:20][CH:21]13)[CH2:15][CH2:14][CH:13]([C:11](=[CH2:12])[CH3:10])[CH2:23]2>>[CH3:1][O:2][P:3]([O:5][CH3:6])([O-:25])=[O:4].[H+].[O:20]1[CH:19]2[CH2:18][C:16]3([C:22]([CH2:23][CH:13]([CH2:14][CH2:15]3)[C:11](=[CH2:12])[CH3:10])([C:24]#[CH:7])[CH:21]12)[CH3:17].N#N",
+    "expected_rxn": ""
+  },
+  {
+    "id": 831,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "[Li+]"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "O=S(=O)(NC1C(C(OC1=O)CSC=2SC=CN=2)OCC3=CC=CC=C3)C=4C=CC(=CC=4)C5=CC=C(C=C5)OC.[Li+].[OH-].[H+]>>O=S(=O)(C=1C=CC(=CC=1)C2=CC=C(C=C2)OC)NC(C(=O)O)C(C(CSC3=NC=CS3)O)OCC=4C=CC=CC=4.[Li+]",
+    "expected_rxn": "[OH-].O=S(=O)(NC1C(C(OC1=O)CSC=2SC=CN=2)OCC3=CC=CC=C3)C=4C=CC(=CC=4)C5=CC=C(C=C5)OC.[H+]>>O=S(=O)(C=1C=CC(=CC=1)C2=CC=C(C=C2)OC)NC(C(=O)O)C(C(CSC3=NC=CS3)O)OCC=4C=CC=CC=4"
+  },
+  {
+    "id": 838,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['C', 'O', '[O]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [
+      "O"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "C",
+      "O",
+      "[O]",
+      "O"
+    ],
+    "borderline_species": [
+      "Cl"
+    ],
+    "output_rxn": "C.C1CN(CCC1N2CCN(C=3C=CC=CC=3)C2=O)CC(O)COC=4C(=NC=CN=4)Cl.O.[O]>>C1CC(CCN1CC(O)COC=2N=CC=NC=2OC)N3C(=O)N(CC3)C4=CC=CC=C4.Cl.O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 839,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['C', 'N', '[O]', '[O]', '[O]', 'O', 'O', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "C",
+      "N",
+      "[O]",
+      "[O]",
+      "[O]",
+      "O",
+      "O",
+      "O"
+    ],
+    "borderline_species": [
+      "Br"
+    ],
+    "output_rxn": "C.C1CC(CCC1C2CCC(CC2)CCC)C=3C=CC(=CC=3)Br.N.[O].[O].[O]>>C1CC(CCC1C2CCC(CC2)CCC)C3=CC=C(C#N)C=C3.Br.O.O.O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 840,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[KH]']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[KH]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "C(C[K])Br.[O-]P(OCC)(=S)SCCC.[H+]>>C(Br)CSP(OCC)(=O)SCCC.[KH]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 844,
+    "source": "bridge",
+    "has_expected": true,
+    "grade": "A",
+    "sub_type": "expected_spectator",
+    "note": "预期答案含旁观物种，Pipeline正确省略",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [
+      "O=P(Cl)(Cl)Cl"
+    ],
+    "problematic_species": [
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CC1(C)C2C(C)(CCC1O)C=3C(CC2)=CC(=C(C=3OC)OC)C(C)C>>CC1(C)C2C(C=3C(CC2)=CC(=C(C=3OC)OC)C(C)C)(CC=C1)C.O",
+    "expected_rxn": "CC1(C)C2C(C)(CCC1O)C=3C(CC2)=CC(=C(C=3OC)OC)C(C)C.ClP(Cl)(Cl)=O>>CC1(C)C2C(C=3C(CC2)=CC(=C(C=3OC)OC)C(C)C)(CC=C1)C.O.O=P(Cl)(Cl)Cl"
+  },
+  {
+    "id": 848,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "E",
+    "sub_type": "all_reasonable",
+    "note": "所有物种化学上合理",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "OO.[O:3]=[S:2](=[O:4])([C:5]=1[NH:9][C:8]=2[C:7](=[CH:13][CH:12]=[CH:11][CH:10]=2)[N:6]=1)[CH3:1].[O:16]=[C:15]([C:17]1=[CH:18][CH:19]=[CH:20][CH:21]=[CH:22]1)[CH3:14]>>[CH:11]1=[CH:12][CH:13]=[C:7]2[C:8]([NH:9][C:5]([NH:6]2)=[O:16])=[CH:10]1.O=S(=O)(O)O.[C:17]1(=[CH:18][CH:19]=[CH:20][CH:21]=[CH:22]1)[C:15](=[CH2:1])[CH3:14]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 867,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[CH:9]=1[CH:10]=[C:11]([CH:16]([N+:21]([O-:22])=[O:23])[CH2:17][CH2:18][C:19]#[N:20])[CH:12]=[C:13]([C:8]=1[O:7][CH3:6])[O:14][CH3:15].[H].[H].[O:3]=[Mn:2](=[O:4])(=[O:5])[O-:1]>>[Mn+2:5].O.[CH3:15][O:14][C:13]1=[CH:12][C:11](=[CH:10][CH:9]=[C:8]1[O:7][CH3:6])[C:16](=[O:1])[CH2:17][CH2:18][C:19]#[N:20].[OH-:6].[N+:1]([O-:2])([O-:3])[O-:4]",
+    "expected_rxn": ""
+  },
+  {
+    "id": 873,
+    "source": "bridge",
+    "has_expected": true,
+    "grade": "A",
+    "sub_type": "expected_spectator",
+    "note": "预期答案含旁观物种，Pipeline正确省略",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [
+      "B"
+    ],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[H].[H].[H].[H].CC(C)(C)C1=C(OCCC(O)C(O)=O)C(C(C)(C)C)=CC(SC(C)(C)SC=2C=C(C(=C(C=2)C(C)(C)C)O)C(C)(C)C)=C1>>CC(C)(C)C=1C(=C(C=C(C=1)SC(C)(C)SC=2C=C(C(C)(C)C)C(=C(C(C)(C)C)C=2)OCCC(CO)O)C(C)(C)C)O.O",
+    "expected_rxn": "B.CC(C)(C)C1=C(OCCC(O)C(O)=O)C(C(C)(C)C)=CC(SC(C)(C)SC=2C=C(C(=C(C=2)C(C)(C)C)O)C(C)(C)C)=C1.[H].[H].[H].[H]>>CC(C)(C)C=1C(=C(C=C(C=1)SC(C)(C)SC=2C=C(C(C)(C)C)C(=C(C(C)(C)C)C=2)OCCC(CO)O)C(C)(C)C)O.B.O"
+  },
+  {
+    "id": 877,
+    "source": "bridge",
+    "has_expected": false,
+    "grade": "G",
+    "sub_type": "h_radical_only",
+    "note": "仅含[H]自由基副产物(2个)",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]"
+    ],
+    "borderline_species": [
+      "Cl",
+      "Cl",
+      "Cl"
+    ],
+    "output_rxn": "CCl.[H].[H].ClS(Cl)(=O)=O.CC(C)S(=O)(=O)NCC(C)(F)c1ccc(cc1)-c1cccc(N)c1>>CC(C)S(=O)(=O)NCC(C)(F)c1ccc(cc1)-c1cccc(NS(C)(=O)=O)c1.Cl.Cl.Cl",
+    "expected_rxn": ""
+  },
+  {
+    "id": 890,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [
+      "O"
+    ],
+    "exp_spectators": [],
+    "problematic_species": [
+      "O",
+      "[O]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "CCOC=C.CC#CC1(CC1)C(C)=O.O.[O]>>CC(=O)C1=CC[C@]2(C)CC[C@]12O.CC=O.O",
+    "expected_rxn": "[O].CC#CC1(CC1)C(C)=O.CCOC=C>>CC(=O)C1=CC[C@]2(C)CC[C@]12O.CC=O"
+  },
+  {
+    "id": 892,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "G",
+    "sub_type": "h_radical_only",
+    "note": "仅含[H]自由基副产物(4个)",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[H].[H].[H].[H].C1N=C1c1ccccc1.O=C1C(=C(C(=C1c1ccccc1)c1ccccc1)c1ccccc1)c1ccccc1>>CO.c1ccc(cc1)C1C=NC(c2ccccc2)=C(c2ccccc2)C(c2ccccc2)=C1c1ccccc1",
+    "expected_rxn": ""
+  },
+  {
+    "id": 1622,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "Nc1ccc(N2CCOCC2)cc1N.O=C(n1ccnc1)n1ccnc1>>O=c1[nH]c2ccc(N3CCOCC3)cc2[nH]1.c1cnc[nH]1.c1cnc[nH]1",
+    "expected_rxn": "O=C(n1ccnc1)n1ccnc1.Nc1ccc(N2CCOCC2)cc1N>>C1=NC=NC1.C1=NC=NC1.O=c1[nH]c2ccc(N3CCOCC3)cc2[nH]1"
+  },
+  {
+    "id": 1851,
+    "source": "fallback",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', '[H]', '[H]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [
+      "Br",
+      "Br"
+    ],
+    "output_rxn": "BrC(Br)(Br)Br.CCOc1ccc([N+](=O)[O-])c(C=O)c1.[H].[H].[H].[H]>>CCOc1ccc([N+](=O)[O-])c(C=C(Br)Br)c1.Br.Br.O",
+    "expected_rxn": ""
+  },
+  {
+    "id": 1852,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [
+      "Br",
+      "Br"
+    ],
+    "output_rxn": "BrC(Br)(Br)Br.COc1ccc(CN(C(=O)OCc2ccccc2)[C@@H]2C(=O)N(Cc3ccc(OC)cc3OC)[C@@H]2CC=O)cc1.[H].[H].[H].[H]>>COc1ccc(CN(C(=O)OCc2ccccc2)[C@@H]2C(=O)N(Cc3ccc(OC)cc3OC)[C@@H]2CC=C(Br)Br)cc1.Br.Br.O",
+    "expected_rxn": "BrC(Br)(Br)Br.COc1ccc(CN(C(=O)OCc2ccccc2)[C@@H]2C(=O)N(Cc3ccc(OC)cc3OC)[C@@H]2CC=O)cc1.C=O>>O=C(Br)Br.COc1ccc(CN(C(=O)OCc2ccccc2)[C@@H]2C(=O)N(Cc3ccc(OC)cc3OC)[C@@H]2CC=C(Br)Br)cc1.O"
+  },
+  {
+    "id": 1853,
+    "source": "bridge",
+    "has_expected": false,
+    "grade": "H",
+    "sub_type": "severe_bare_atoms",
+    "note": "含问题物种: ['[H]', '[H]', '[H]', '[H]', 'O']",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [
+      "Br",
+      "Br"
+    ],
+    "output_rxn": "[H].[H].[H].[H].BrC(Br)(Br)Br.N#C[C@@H]1CC[C@@H](C=O)CC1>>N#C[C@@H]1CC[C@@H](C=C(Br)Br)CC1.O.Br.Br",
+    "expected_rxn": ""
+  },
+  {
+    "id": 1863,
+    "source": "bridge",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [
+      "Br",
+      "Br"
+    ],
+    "output_rxn": "[H].[H].[H].[H].O=Cc1ccco1.BrC(Br)(Br)Br>>BrC(Br)=Cc1ccco1.O.Br.Br",
+    "expected_rxn": "BrC(Br)(Br)Br.O=Cc1ccco1.C=O>>O=C(Br)Br.BrC(Br)=Cc1ccco1.O"
+  },
+  {
+    "id": 4602,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "C",
+    "sub_type": "main_mismatch",
+    "note": "主产物不一致或存在显著结构差异",
+    "main_overlap": false,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]",
+      "O"
+    ],
+    "borderline_species": [],
+    "output_rxn": "[H].[H].ClC(Cl)(Cl)Cl.CC(C)O>>ClC(Cl)Cl.O.CC(C)Cl",
+    "expected_rxn": "[Cl:1][C:2]([Cl:3])([Cl:4])[Cl:5].[CH2:7]([CH2:8][OH:9])[CH3:6].[H].[H]>>[Cl:1][CH:2]([Cl:3])[Cl:4].[CH2:7]([CH3:6])[CH2:8][Cl:5].[OH2:9]"
+  },
+  {
+    "id": 4997,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [
+      "[H]",
+      "[H]"
+    ],
+    "borderline_species": [
+      "Br"
+    ],
+    "output_rxn": "O=CC1=CC=CC=C1.[H].[H].C=CCBr>>O[C@@H](CC=C)C1=CC=CC=C1.Br",
+    "expected_rxn": "O=CC1=CC=CC=C1.[H][H].C=CCBr>>O[C@@H](CC=C)C1=CC=CC=C1.[H]Br"
+  },
+  {
+    "id": 5029,
+    "source": "fallback",
+    "has_expected": true,
+    "grade": "B",
+    "sub_type": "main_match_byproduct_diff",
+    "note": "主产物正确，副产物组合不同",
+    "main_overlap": true,
+    "out_spectators": [],
+    "exp_spectators": [],
+    "problematic_species": [],
+    "borderline_species": [],
+    "output_rxn": "CC\\C=C\\C=C\\[C@H](CCC(=O)NO)OCc1ccccc1>>[H][C@]12C=C[C@@H](CC)ON1C(=O)CC[C@@H]2OCC1=CC=CC=C1.[H][H]",
+    "expected_rxn": "CC\\C=C\\C=C\\[C@H](CCC(=O)NO)OCc1ccccc1.[O]>>[H][C@]12C=C[C@@H](CC)ON1C(=O)CC[C@@H]2OCC1=CC=CC=C1.O"
+  }
+]

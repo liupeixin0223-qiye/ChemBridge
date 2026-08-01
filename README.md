@@ -1,13 +1,13 @@
-# ChemBridge: LLM-Enhanced Reaction Rebalancing Workflow
+# ChemBridge: A Five-Level Cascade Workflow for Chemical Reaction Balancing and Completion
 
-ChemBridge is a computational chemistry workflow for correcting atom-imbalanced reaction SMILES. It combines the deterministic reaction-rebalancing components from SynRBL with an independently organized staged workflow that introduces LLM-assisted species bridging, fallback generation, auditing, routing, and result reporting.
+ChemBridge is a five-level cascade workflow for balancing and completing incomplete chemical reaction equations. It integrates deterministic graph-matching algorithms (inherited from SynRBL) with large language model (LLM)-assisted strategy selection and generative repair, coordinated through confidence-driven hierarchical routing.
 
-> **Contribution and attribution note.** The repository name is ChemBridge, while the Python import/package name remains `synrbl` for compatibility with the modified SynRBL codebase. SynRBL provides the deterministic rule-based and MCS-based rebalancing components used in this project. Peixin Liu built the ChemBridge workflow around those components, including the staged orchestration in `run_rebalancer_with_llm.py`, the LLM species-bridge and fallback modules, the bridge/fallback validation logic, workflow-level confidence routing, output reporting, and format/interface adjustments needed to connect SynRBL outputs with the ChemBridge workflow. These interface adjustments are intended to preserve the deterministic SynRBL logic while making its outputs usable inside the full ChemBridge pipeline. Please cite the original SynRBL work when using its deterministic rebalancing components.
+> **Contribution and attribution note.** The repository name is ChemBridge, while the Python import/package name remains `synrbl` for compatibility with the modified SynRBL codebase. SynRBL provides the deterministic rule-based and MCS-based rebalancing components. ChemBridge contributes the five-level cascade architecture, including progressive voting MCS selection, global exhaustive allocation, multi-fragment merging, template matching, Bridge LLM strategy selection, Fallback LLM generative completion with error-correction retry, and the confidence-driven routing that coordinates all levels. Please cite the original SynRBL work when using its deterministic rebalancing components.
 
 ## Table of Contents
 
 - [Overview](#overview)
-- [Workflow](#workflow)
+- [Five-Level Cascade Architecture](#five-level-cascade-architecture)
 - [Repository Structure](#repository-structure)
 - [Installation](#installation)
 - [LLM Configuration](#llm-configuration)
@@ -18,17 +18,54 @@ ChemBridge is a computational chemistry workflow for correcting atom-imbalanced 
 
 ## Overview
 
-ChemBridge separates the deterministic rebalancing function from the workflow logic that decides when and how to use it. In this repository, SynRBL contributes the deterministic rule-based and MCS-based reaction rebalancing methods. ChemBridge contributes the surrounding workflow framework that prepares inputs, routes cases across stages, calls LLM-assisted modules when needed, re-audits generated candidates, and writes traceable outputs.
+ChemBridge addresses the prevalent issue of missing co-reactants or by-products in chemical reaction databases. The workflow implements a five-level cascade in which each level processes only reactions that all preceding levels have failed to resolve, and the outputs of different levels do not overlap. This sequential structure ensures that deterministic methods handle the majority of reactions with guaranteed atom conservation, while LLM-assisted modules are invoked only for the most challenging cases.
 
-The current workflow has three main decision layers:
+Key algorithmic improvements over the original SynRBL include:
 
-1. **Deterministic SynRBL round**: preprocesses reaction SMILES, removes atom mapping, checks already-balanced reactions, then runs the SynRBL rule-based/MCS-based rebalancing components. Some output-field and interface formatting has been adjusted so that SynRBL results, including fields such as confidence, can be consumed consistently by the ChemBridge workflow.
-2. **LLM species bridge**: for failed, invalid, or low-confidence cases, asks an LLM to infer likely missing side species from the original reaction and exact atom imbalance. Candidate variants are then audited through deterministic checks and the SynRBL-based rebalancing route before acceptance.
-3. **LLM fallback generation**: if the bridge route cannot produce an accepted balanced result, asks the LLM for a complete reaction candidate and validates it again through deterministic balance checks and workflow-level routing.
+1. **Progressive voting MCS selection**: A two-layer voting mechanism (majority vote + rank-based weighted scoring) replaces the original atom-count-only comparison for selecting among multiple MCS search results.
+2. **Global exhaustive allocation (Path B)**: Cartesian-product exhaustive enumeration of all valid reactant–product allocation combinations, activated when the greedy Path A fails, with direction swap optimization and safety mechanisms.
+3. **Multi-fragment merging**: Extension from two-fragment to four-fragment merging, with radical retention, a three-layer bond-type decision engine, and a three-stage merging workflow.
+4. **Template matching**: A structured knowledge base of 303 reaction templates with backtracking traversal assignment and three-outcome classification (Full Match / Subset Match / Mismatch).
+5. **LLM role redesign**: Bridge LLM repositioned from an unconstrained species generator to a constrained strategy selector (output space: A/B/C); Fallback LLM augmented with an error-correction retry mechanism (up to 2 retries with recalculated atom deficit feedback).
 
-The intended design is not to directly trust the LLM as the final judge. LLM outputs are treated as candidate generators. The workflow records validity, atom balance, source route, confidence, stage-level diagnostics, and bridge/fallback traces so that each result can be inspected.
+## Five-Level Cascade Architecture
 
-## Workflow
+```
+Input reaction
+    │
+    ▼
+┌─────────────────────────────────────────────┐
+│ Level 1: Greedy Graph Matching (Path A)     │
+│   MCS-based matching + progressive voting   │
+└─────────────────┬───────────────────────────┘
+                  │ (failed / low confidence)
+                  ▼
+┌─────────────────────────────────────────────┐
+│ Level 2: Exhaustive Global Matching (Path B)│
+│   Cartesian-product exhaustive allocation   │
+└─────────────────┬───────────────────────────┘
+                  │ (failed / low confidence)
+                  ▼
+┌─────────────────────────────────────────────┐
+│ Level 3: Template Matching                  │
+│   303 templates + backtracking assignment   │
+└─────────────────┬───────────────────────────┘
+                  │ (unresolved / type inference)
+                  ▼
+┌─────────────────────────────────────────────┐
+│ Level 4: Bridge LLM Adjudication            │
+│   Strategy selector (A / B / C)             │
+└─────────────────┬───────────────────────────┘
+                  │ (C selected / validation failed)
+                  ▼
+┌─────────────────────────────────────────────┐
+│ Level 5: Fallback LLM Generative Completion │
+│   End-to-end repair + error-correction retry│
+└─────────────────────────────────────────────┘
+                  │
+                  ▼
+            Final output
+```
 
 The main entry point is:
 
@@ -36,51 +73,79 @@ The main entry point is:
 python run_rebalancer_with_llm.py <input_file> [options]
 ```
 
-At a high level, the workflow performs the following steps:
-
-1. Load tabular input from CSV, TSV/TXT, Excel, or JSON.
-2. Resolve reaction, ID, and optional expected-reaction columns.
-3. Run the deterministic SynRBL round.
-4. Classify each first-round result:
-   - already prebalanced;
-   - rule-based small-molecule solution;
-   - high-confidence MCS solution;
-   - low-confidence MCS candidate;
-   - invalid/unbalanced/unsolved case requiring the bridge route.
-5. Run the LLM species bridge for cases requiring additional side-species proposals.
-6. Re-run deterministic validation on bridge-generated variants.
-7. Run fallback LLM generation only for cases still unresolved after the bridge route.
-8. Write staged JSON/CSV outputs, failed cases, workflow statistics, and accuracy comparison reports.
-
 ## Repository Structure
 
 ```text
 ChemBridge/
-├── run_rebalancer_with_llm.py        # Main staged ChemBridge workflow entry point
-├── synrbl/                           # Modified SynRBL package and ChemBridge extensions
-│   ├── balancing.py                  # Core deterministic Balancer
-│   ├── reaction_rebalancer.py        # Batch rebalancing API/configuration
-│   ├── llm_species_bridge.py         # LLM side-species proposal bridge
-│   ├── llm_fallback_postprocessor.py # Final LLM fallback generator/auditor
-│   ├── llm/                          # Moonshot/Kimi client and prompts
-│   │   ├── species_prompts.py         # Active species-bridge prompts used by code
-│   │   ├── fallback_prompts.py        # Active fallback prompts used by code
-│   │   ├── species_prompts_strict.py  # Strict prompt variant used in paper experiments
-│   │   └── fallback_prompts_strict.py # Strict prompt variant used in paper experiments
-│   ├── SynRuleImputer/               # Rule-based imputation components
-│   ├── SynMCSImputer/                # MCS-based imputation components
-│   ├── SynChemImputer/               # Chemical post-processing utilities
-│   └── SynProcessor/                 # Reaction SMILES preprocessing utilities
-├── Data/                             # Validation/raw data and generated experiment outputs
-├── Test/                             # Original/modified SynRBL tests
-├── Scripts/                          # Utility scripts
-├── pyproject.toml                    # Python package metadata
-├── requirements.txt                  # Runtime dependencies
-├── LICENSE                           # License inherited from SynRBL unless replaced
-└── CITATION.cff                      # SynRBL citation metadata
+├── run_rebalancer_with_llm.py            # Main entry point: five-level cascade workflow
+├── per_dataset_benchmark.py              # Per-dataset benchmark script
+├── synrbl/                               # Core package (SynRBL-compatible + ChemBridge extensions)
+│   ├── __init__.py / __main__.py         # Package init and CLI entry (python -m synrbl)
+│   ├── balancing.py                      # Core deterministic Balancer
+│   ├── mcs_search.py                     # Level 1: Progressive voting MCS search
+│   ├── exhaustive_allocation.py          # Level 2: Global exhaustive allocation (Path B)
+│   ├── template_matching.py              # Level 3: Template matching (303 built-in templates)
+│   ├── bridge_strategy_selector.py       # Level 4: Bridge LLM strategy selector
+│   ├── llm_fallback_postprocessor.py     # Level 5: Fallback LLM with error-correction retry
+│   ├── llm_postprocessor.py              # LLM post-processing pipeline
+│   ├── llm_species_bridge.py             # LLM species bridge utilities
+│   ├── unified_decision.py               # Confidence-driven cascade routing
+│   ├── confidence_prediction.py          # XGBoost confidence prediction
+│   ├── evaluation_utils.py               # Evaluation utilities
+│   ├── preprocess.py / postprocess.py    # Reaction preprocessing / postprocessing
+│   ├── rule_based.py                     # Rule-based imputation
+│   ├── rsmi_utils.py                     # Reaction SMILES utilities
+│   ├── llm/                              # LLM client and prompt modules
+│   │   ├── client.py                     #   Moonshot/Kimi API client
+│   │   ├── bridge_strategy_client.py     #   Bridge strategy API client
+│   │   ├── bridge_strategy_prompts.py    #   Bridge strategy prompts
+│   │   ├── fallback_client.py            #   Fallback API client
+│   │   ├── fallback_prompts.py           #   Fallback prompts (v3, final version)
+│   │   ├── species_client.py             #   Species bridge API client
+│   │   ├── species_prompts.py            #   Species bridge prompts
+│   │   ├── models.py                     #   Data models
+│   │   └── prompts.py                    #   General prompt utilities
+│   ├── SynMCSImputer/                    # MCS-based imputation (merge, rules, structure)
+│   ├── SynRuleImputer/                   # Rule-based imputation
+│   ├── SynChemImputer/                   # Chemical post-processing
+│   ├── SynProcessor/                     # Reaction SMILES preprocessing
+│   ├── SynAnalysis/                      # Analysis and scoring (XGBoost model)
+│   ├── SynUtils/                         # General utilities
+│   ├── SynVis/                           # Visualization
+│   └── SynCmd/                           # CLI commands
+├── prompt/                               # Prompt reference files
+│   └── Bridge_LLM_now.py                #   Current Bridge LLM prompt
+├── llm/                                  # Ablation experiment (Appendix A, Section A2)
+│   ├── ablation_fallback_llm.py          #   Direct LLM invocation ablation script
+│   ├── ablation_results.csv              #   Per-reaction ablation results (322 reactions)
+│   ├── ablation_summary.txt              #   Ablation summary
+│   └── ablation_audit_report.txt         #   Ablation audit report
+├── Data/
+│   ├── Raw_data/                         # Original source data (Golden, Jaworski, USPTO)
+│   ├── Rules/                            # Automated rules
+│   ├── Testcase/                         # Test cases
+│   └── Validation_set/                   # Validation data and workflow outputs
+│       ├── validation_set.csv            #   Original test set (from SynRBL)
+│       ├── validation_set_fixed.csv      #   Corrected test set (updated expected reactions)
+│       ├── validation_set_fixed_LLM.csv  #   LLM subset (322 reactions)
+│       └── rows-1-5032/                  #   Full workflow output (published validation artifact)
+│           ├── pipeline_status.csv       #     92-column per-reaction processing trace
+│           ├── accuracy_comparison_detail.csv  # Per-reaction accuracy comparison
+│           ├── balanced_reactions.csv    #     Successfully balanced reactions
+│           ├── failed_reactions.csv      #     Failed reactions
+│           └── workflow_statistics.csv   #     Aggregate statistics
+├── Pipeline/Validation/Analysis/         # Validation analysis notebooks
+├── Scripts/                              # Utility scripts
+├── Docs/                                 # Documentation and paper figures
+├── Test/                                 # Unit tests
+├── pyproject.toml                        # Python package metadata
+├── requirements.txt                      # Runtime dependencies
+├── LICENSE                               # MIT License (inherited from SynRBL)
+├── CITATION.cff                          # Citation metadata
+└── README.md
 ```
 
-This repository intentionally keeps the validation artifact folder `Data/Validation_set/rows-1-5032/`. Other generated `rows-*` output folders are ignored by `.gitignore` to avoid publishing stale experiment runs.
+The validation artifact folder `Data/Validation_set/rows-1-5032/` is intentionally retained. Other generated `rows-*` output folders are ignored by `.gitignore`.
 
 ## Installation
 
@@ -102,51 +167,43 @@ conda activate chembridge-env
 
 ### Install dependencies
 
-From the repository root:
-
 ```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install -e .
 ```
 
-Core dependencies include:
+Core dependencies:
 
-- `synkit`
-- `rdkit` through the chemistry dependency stack used by SynRBL/SynKit
-- `xgboost`
-- `imbalanced_learn`
-- `scikit_learn`
-- `reportlab`
-- `fgutils`
-- `pandas`
+- `synkit` >= 1.1.2
+- `rdkit` >= 2026.3.1
+- `pandas` >= 3.0.2
+- `xgboost` >= 2.0.3
+- `imbalanced_learn` >= 0.14.0
+- `scikit_learn` == 1.7.2
+- `reportlab` >= 4.1.0
+- `fgutils` >= 0.1.3
 
-The development environment used for the current validation run used Python 3.11.15. Important package versions included RDKit 2026.3.1, SynKit 1.3, pandas 3.0.2, scikit-learn 1.7.2, imbalanced-learn 0.14.1, fgutils 0.2.3, reportlab 4.4.10, and xgboost 3.0.0. Equivalent newer compatible versions may also work, but these versions document the tested local environment.
-
-If `pandas` or Excel support packages are missing in your environment, install them explicitly:
-
-```bash
-pip install pandas openpyxl
-```
+The development environment used Python 3.11.15 with RDKit 2026.3.1, SynKit 1.3, pandas 3.0.2, scikit-learn 1.7.2, imbalanced-learn 0.14.1, fgutils 0.2.3, reportlab 4.4.10, and xgboost 3.0.0.
 
 ## LLM Configuration
 
-ChemBridge currently uses a Moonshot/Kimi-compatible chat-completions endpoint by default.
+ChemBridge uses a Moonshot/Kimi-compatible chat-completions endpoint.
 
-Set your API key as an environment variable before running LLM-enabled workflows:
+Set your API key before running LLM-enabled workflows:
 
 ```powershell
 $env:MOONSHOT_API_KEY="your_api_key_here"
 ```
 
-Default LLM parameters in `run_rebalancer_with_llm.py`:
+Default LLM parameters:
 
 - API key environment variable: `MOONSHOT_API_KEY`
 - Base URL: `https://api.moonshot.cn/v1/chat/completions`
-- Score model: `kimi-k2.5`
-- Generate model: `kimi-k2.5`
+- Model: `kimi-k2.5`
+- Temperature: `0.6`
 
-You can override them from the command line:
+Override from the command line:
 
 ```bash
 python run_rebalancer_with_llm.py data.csv \
@@ -155,7 +212,7 @@ python run_rebalancer_with_llm.py data.csv \
   --llm-generate-model kimi-k2.5
 ```
 
-Do not commit API keys, `.env` files, or private service credentials to GitHub.
+Do not commit API keys or `.env` files to GitHub.
 
 ## Usage
 
@@ -163,15 +220,15 @@ Do not commit API keys, `.env` files, or private service credentials to GitHub.
 
 Input files may be `.csv`, `.tsv`, `.txt`, `.xlsx`, `.xls`, or `.json`.
 
-By default, ChemBridge expects:
+Default column names:
 
 - reaction column: `reactions`
 - ID column: `R-id`
-- expected/reference reaction column: `expected_reaction` if available
+- expected/reference reaction column: `expected_reaction`
 
-Common fallback column names such as `reaction`, `rxn`, `rsmi`, `id`, and `ID` are also resolved automatically.
+Common fallback column names (`reaction`, `rxn`, `rsmi`, `id`, `ID`) are resolved automatically.
 
-### Run on a CSV file
+### Run on the validation set
 
 ```bash
 python run_rebalancer_with_llm.py Data/Validation_set/validation_set.csv \
@@ -180,23 +237,7 @@ python run_rebalancer_with_llm.py Data/Validation_set/validation_set.csv \
   --expected-col expected_reaction
 ```
 
-### Process only a subset
-
-```bash
-python run_rebalancer_with_llm.py Data/Validation_set/validation_set.csv --head 100
-```
-
-Or use one-based row slicing, excluding the header row:
-
-```bash
-python run_rebalancer_with_llm.py Data/Validation_set/validation_set.csv \
-  --start-row 1 \
-  --end-row 500
-```
-
-### LLM-enabled validation run with manual thresholds
-
-The validation artifact currently kept in this repository corresponds to the `rows-1-5032` style run. A representative command is:
+### Full LLM-enabled validation run
 
 ```bash
 python run_rebalancer_with_llm.py "Data/Validation_set/validation_set.csv" \
@@ -210,56 +251,64 @@ python run_rebalancer_with_llm.py "Data/Validation_set/validation_set.csv" \
   --end-row 5032
 ```
 
-These threshold values are exposed as command-line arguments in `run_rebalancer_with_llm.py`, so they can be manually adjusted to match the desired confidence policy for a specific experiment.
+### Process a subset
+
+```bash
+python run_rebalancer_with_llm.py Data/Validation_set/validation_set.csv --head 100
+```
 
 ### Useful options
 
 ```text
---output-dir                         Output directory; defaults to input file directory
---synrbl-confidence-threshold        Confidence threshold for native SynRBL
---score-threshold                    Score threshold for LLM candidate scoring/generation policy
---retry-confidence-threshold         Threshold for fallback retry decisions
+--output-dir                          Output directory
+--synrbl-confidence-threshold         Confidence threshold for SynRBL
+--score-threshold                     Score threshold for LLM candidate policy
+--retry-confidence-threshold          Threshold for fallback retry decisions
 --species-bridge-confidence-threshold Threshold for bridge acceptance
---enable-llm-thinking                Enable Kimi thinking mode
---sep                                Custom separator for CSV/TSV/TXT input
+--enable-llm-thinking                 Enable Kimi thinking mode
+--sep                                 Custom separator for CSV/TSV/TXT input
 ```
 
 ## Outputs
 
-For each run, ChemBridge creates a run folder such as `rows-1-500` or `head-100` under the selected output directory.
+For each run, ChemBridge creates a run folder (e.g., `rows-1-5032`) under the output directory.
 
 Main output files:
 
-- `synrbl_results_original_stage.json/csv`: first deterministic SynRBL-stage decisions.
-- `synrbl_results_bridge_stage.json/csv`: bridge-stage decisions for records that entered the species bridge, including bridge-related trace fields.
-- `synrbl_results_with_llm.json/csv`: final formal workflow output, including bridge/fallback route information when applicable.
-- `synrbl_failed_cases.json` and `synrbl_failed_cases_flat.csv`: unresolved cases.
-- `workflow_statistics.csv`: aggregate route/status statistics.
-- `accuracy_comparison.json` and `accuracy_comparison_detail.csv`: comparison against the expected reaction column, when available.
+- `pipeline_status.csv / .json`: Complete per-reaction processing trace (92 columns), including workflow route, confidence scores, bridge/fallback diagnostics, and MCS details.
+- `accuracy_comparison_detail.csv`: Per-reaction comparison against the expected reaction column.
+- `balanced_reactions.csv / .json`: Successfully balanced reactions.
+- `failed_reactions.csv / .json`: Unresolved reactions.
+- `workflow_statistics.csv`: Aggregate route/status statistics.
 
-Important final-result columns include:
+Key result columns in `pipeline_status.csv`:
 
-- `formal_output_reaction`: final accepted reaction SMILES.
-- `workflow_confidence`: workflow-level confidence/priority score.
-- `workflow_source`: final source route, such as `SynRBL`, `bridge`, `fallback`, or `prebalance`.
-- `success` / `output_status`: whether a valid balanced final output was produced.
-- `stage1_case` and `stage2_case`: branch labels useful for debugging.
-- `internal_candidate_1_reaction` and `internal_candidate_2_reaction`: retained low-confidence candidates.
-- `bridge_raw_output_reaction` and `bridge_accepted_output_reaction`: bridge diagnostics.
+- `formal_output_reaction`: Final accepted reaction SMILES.
+- `workflow_source`: Final source route (`SynRBL`, `Template`, `Bridge`, `Fallback`, `Prebalance`).
+- `workflow_confidence`: Workflow-level confidence score.
+- `success` / `output_status`: Whether a valid balanced output was produced.
+- `stage1_case` / `stage2_case`: Branch labels for debugging.
+- `mcs_vote_method`: MCS selection method used (`weighted_ranking`).
+- `bridge_selected_strategy`: Bridge LLM decision (A/B/C).
+- `fallback_case`: Fallback trigger reason.
 
 ## Benchmark and Analysis
 
-If your dataset contains a reference column such as `expected_reaction`, ChemBridge automatically writes workflow statistics and accuracy comparison reports after each run.
+On the 5,032-reaction test set (derived from the SynRBL validation dataset), the ChemBridge workflow achieves:
 
-Additional validation helpers are available under `Data/Validation_set/`, including scripts for merging and comparing experiment outputs.
+- **Atom conservation (Success)**: 4,965 / 5,032 (98.7%)
+- **Exact topological matching (Accuracy)**: 4,850 / 5,032 (96.4%)
+- **Cumulative actual matches** (including equivalent balancing): 4,914 / 5,032 (97.7%)
 
-The validation input file `Data/Validation_set/validation_set.csv` is retained from the original SynRBL repository and is used here as a benchmark input for evaluating the ChemBridge workflow. The validation data itself should therefore be attributed to the original SynRBL project. The published validation artifact `Data/Validation_set/rows-1-5032/` contains ChemBridge-generated outputs produced from this SynRBL validation set. It intentionally keeps the original-stage, bridge-stage, final-result, failed-case, workflow-statistics, and accuracy-comparison files so that bridge and fallback traces are available for inspection.
+The original SynRBL algorithm achieves 4,617 / 5,032 (91.8%) Success and 4,601 / 5,032 (91.4%) Accuracy under the same confidence threshold (0.8).
+
+The ablation experiment script (`llm/ablation_fallback_llm.py`) and its results (`llm/ablation_results.csv`) are included for reproducibility.
 
 ## Attribution, Citation, and License
 
-ChemBridge-specific workflow modifications are authored by Peixin Liu. In this repository, SynRBL provides the deterministic rule-based and MCS-based rebalancing components. ChemBridge provides the staged workflow framework that coordinates preprocessing, SynRBL invocation, LLM species bridging, fallback generation, candidate auditing, confidence-based routing, and result reporting. Some SynRBL-facing interfaces and output formats were adjusted so that deterministic outputs such as confidence and solved-route information can be used consistently inside the ChemBridge workflow; these changes are intended as integration changes rather than changes to the underlying deterministic rebalancing idea.
+ChemBridge-specific workflow modifications are authored by Peixin Liu. SynRBL provides the deterministic rule-based and MCS-based rebalancing components. ChemBridge provides the five-level cascade architecture, progressive voting MCS selection, global exhaustive allocation, multi-fragment merging, template matching, Bridge LLM strategy selection, Fallback LLM generative completion with error-correction retry, and confidence-driven hierarchical routing.
 
-Please retain attribution to the original SynRBL authors and cite their paper when using the SynRBL-derived deterministic components:
+Please cite the original SynRBL authors when using the SynRBL-derived deterministic components:
 
 ```bibtex
 @Article{Phan2024,
@@ -275,4 +324,4 @@ Please retain attribution to the original SynRBL authors and cite their paper wh
 }
 ```
 
-This project currently retains the MIT License file from SynRBL. If you publish ChemBridge as a derivative work, keep the original copyright/license notice and add your own copyright notice for your modifications where appropriate.
+This project retains the MIT License from SynRBL. If you publish ChemBridge as a derivative work, keep the original copyright/license notice and add your own copyright notice for your modifications.

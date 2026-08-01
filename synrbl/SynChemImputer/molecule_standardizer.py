@@ -41,7 +41,7 @@ class MoleculeStandardizer:
         return Chem.CanonSmiles(smiles)
 
     @staticmethod
-    def standardize_enol(smiles: str, atom_indices: List[int] = [0, 1, 2]) -> str:
+    def standardize_enol(smiles: str, atom_indices: List[int] = None) -> str:
         """
         Converts a given enol form based to carbonyl based on specified atom indices.
 
@@ -57,6 +57,11 @@ class MoleculeStandardizer:
         >>> enol("C=C(-O)C", [0, 1, 2])
         'CC(=O)-C'
         """
+        if atom_indices is None:
+            atom_indices = [0, 1, 2]
+        else:
+            atom_indices = list(atom_indices)
+
         # Initialize molecule and editable molecule
         mol = Chem.MolFromSmiles(smiles)
         emol = Chem.EditableMol(mol)

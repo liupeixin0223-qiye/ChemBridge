@@ -18,6 +18,7 @@ class TestFindMissingGraphs(unittest.TestCase):
             missing_parts,
             boundary_atoms,
             nearest_neighbors,
+            radical_sites,
         ) = self.fm.find_missing_parts_pairs([self.mol], [self.mcs_mol])
 
         # Check if missing_parts contains valid molecules
@@ -27,6 +28,8 @@ class TestFindMissingGraphs(unittest.TestCase):
         # Check boundary atoms and nearest neighbors lists
         self.assertIsInstance(boundary_atoms, list)
         self.assertIsInstance(nearest_neighbors, list)
+        # Check radical sites list
+        self.assertIsInstance(radical_sites, list)
 
     def test_map_parent_to_child(self):
         # Example to map parent to child atom indices

@@ -152,6 +152,7 @@ class RuleBasedMethod:
         constrain = RuleConstraint(
             solve,
             ban_atoms=[
+                "[H]",
                 "[O].[O]",
                 "F-F",
                 "Cl-Cl",

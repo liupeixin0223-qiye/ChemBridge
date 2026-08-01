@@ -40,6 +40,7 @@ def find_single_graph_parallel(mcs_mol_list, sorted_reactants_mol_list, n_jobs=4
             "smiles": [],
             "boundary_atoms_products": [],
             "nearest_neighbor_products": [],
+            "radical_sites": [],
             "issue": "Find Missing Graph terminated by timeout",
         }
         try:
@@ -58,6 +59,8 @@ def find_single_graph_parallel(mcs_mol_list, sorted_reactants_mol_list, n_jobs=4
             ]
             output["boundary_atoms_products"] = result[1]
             output["nearest_neighbor_products"] = result[2]
+            output["radical_sites"] = result[3] if len(result) > 3 else []
+            output["issue"] = ""
         except multiprocessing.TimeoutError:
             output["issue"] = "Find Missing Graph terminated by timeout"
         except Exception as e:

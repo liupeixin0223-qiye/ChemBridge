@@ -2,6 +2,8 @@ from rdkit import Chem
 from typing import Dict, List
 from synrbl.SynChemImputer.curate_oxidation import CurationOxidation
 from synrbl.SynChemImputer.curate_reduction import CurationReduction
+from synrbl.SynChemImputer.appel_reaction import AppelReaction
+from synrbl.SynChemImputer.peroxide_imputer import PeroxidGroupImputer
 from joblib import Parallel, delayed
 
 
@@ -97,6 +99,14 @@ class PostProcess:
             value for value in label_data if value["label"] == "Oxidation"
         ]
         other_data = [value for value in label_data if value["label"] == "unspecified"]
+
+        # ── Appel 反应 & 过氧化物/过氧酸特殊修补（C-3 集成） ──
+        # 对所有已标注反应执行，修补器内部做模式检测，不匹配则跳过
+        appel = AppelReaction()
+        peroxide = PeroxidGroupImputer()
+        for d in label_data:
+            appel.fit(d, self.reaction_col)
+            peroxide.fix(d, self.reaction_col)
 
         curate_reduction = CurationReduction()
         curate_oxidation = CurationOxidation()

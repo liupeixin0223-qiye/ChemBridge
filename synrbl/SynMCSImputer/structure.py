@@ -12,6 +12,7 @@ class Boundary:
         symbol: str | None = None,
         neighbor_index: int | None = None,
         neighbor_symbol: str | None = None,
+        radical_electrons: int = 0,
     ):
         self.compound = compound
         self.index = index
@@ -24,6 +25,8 @@ class Boundary:
             src_mol = self.promise_src()
             self.neighbor_symbol = src_mol.GetAtomWithIdx(neighbor_index).GetSymbol()
         self.is_merged = False
+        self.radical_electrons = radical_electrons
+        self.capped_hydrogens = 0
 
     def __str__(self) -> str:
         return "Boundary '{}' @ {} in '{}' from '{}'.".format(
@@ -141,6 +144,8 @@ class Compound:
         symbol: str | None = None,
         neighbor_index: int | None = None,
         neighbor_symbol: str | None = None,
+        radical_electrons: int = 0,
+        capped_hydrogens: int = 0,
     ) -> Boundary:
         b = Boundary(
             self,
@@ -148,7 +153,9 @@ class Compound:
             symbol=symbol,
             neighbor_index=neighbor_index,
             neighbor_symbol=neighbor_symbol,
+            radical_electrons=radical_electrons,
         )
+        b.capped_hydrogens = capped_hydrogens
         b.verify()
         self.boundaries.append(b)
         return b
@@ -160,7 +167,7 @@ class Compound:
     def concat(self, compound: Compound):
         if self.compound_set != compound.compound_set:
             raise ValueError("Compounds are not from the same set.")
-        if len(self.boundaries) > 0 or len(self.boundaries) > 0:
+        if len(self.boundaries) > 0 or len(compound.boundaries) > 0:
             raise ValueError(
                 "Can not concat compounds with open boundaries. Try merging them."
             )

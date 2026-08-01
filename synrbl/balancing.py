@@ -2,7 +2,7 @@ import copy
 import logging
 import traceback
 
-from synrbl.preprocess import preprocess
+from synrbl.preprocess import preprocess, input_sanitize_check
 from synrbl.postprocess import Validator
 from synrbl.rule_based import RuleBasedMethod
 from synrbl.mcs_search import MCSSearch
@@ -20,6 +20,8 @@ logger = logging.getLogger("synrbl")
 
 def merge_stats(stats, new_stats):
     if stats is None:
+        return
+    if new_stats is None:
         return
     stats_keys = list(stats.keys())
     new_stats_keys = list(new_stats.keys())
@@ -45,6 +47,8 @@ class Balancer:
         llm_postprocessor: LLMPostprocessor | None = None,
         llm_species_bridge: LLMSpeciesBridge | None = None,
         llm_fallback_postprocessor: LLMFallbackPostprocessor | None = None,
+        enable_advanced_scoring: bool = True,
+        enable_multi_fragment: bool = True,
     ):
         self.__reaction_col = reaction_col
         self.__id_col = id_col
@@ -65,6 +69,8 @@ class Balancer:
         self.llm_fallback_postprocessor = llm_fallback_postprocessor
 
         self.remove_aam = True
+        self.enable_advanced_scoring = enable_advanced_scoring
+        self.enable_multi_fragment = enable_multi_fragment
         self.batch_size = batch_size
         self.cache = cache
         self.cache_dir = cache_dir
@@ -150,6 +156,8 @@ class Balancer:
             mcs_data_col=self.__mcs_data_col,
             issue_col=self.__issue_col,
             n_jobs=n_jobs,
+            enable_progressive_voting=enable_advanced_scoring,
+            count_dot_components=enable_advanced_scoring,
         )
         self.mcs_method = MCSBasedMethod(
             reaction_col,
@@ -158,6 +166,7 @@ class Balancer:
             issue_col=self.__issue_col,
             rules_col=self.__rules_col,
             smiles_standardizer=[MoleculeStandardizer()],
+            enable_multi_fragment=enable_multi_fragment,
         )
         self.post_processor = PostProcess(
             id_col=id_col,
@@ -206,7 +215,9 @@ class Balancer:
                 pp_result["label"] != "unspecified"
                 and "curated_reaction" in pp_result.keys()
             ):
-                idx = key_index_map[pp_result[self.__id_col]]
+                idx = key_index_map.get(pp_result.get(self.__id_col))
+                if idx is None:
+                    continue
                 reactions[idx][self.__reaction_col] = pp_result["curated_reaction"]
 
     def run_prebalance_check(self, reactions, stats=None):
@@ -253,7 +264,7 @@ class Balancer:
     def _run_prebalance_shortcircuit(self, reactions, stats=None):
         self.run_prebalance_check(reactions, stats=stats)
 
-    def run_core_pipeline(self, reactions, stats=None, allow_low_confidence_solved=False):
+    def run_core_pipeline(self, reactions, stats=None, allow_low_confidence_solved=False, skip_mcs=False):
         for reaction in reactions:
             stage_summary = reaction.setdefault("workflow_stage_summary", {})
             stage_summary.setdefault("core_pipeline_runs", 0)
@@ -281,25 +292,27 @@ class Balancer:
             elif stage_summary.get("core_pipeline_runs", 0) > 1 and reaction.get(self.__solved_by_col) == "rule-based":
                 stage_summary["second_rule_based_solved"] = True
 
-        self.mcs_search.find(reactions)
+        # MCS 搜索：skip_mcs=True 时跳过（MCS 数据已由上游缓存注入）
+        if not skip_mcs:
+            self.mcs_search.find(reactions)
 
         self.mcs_method.run(reactions, stats=stats)
         self.mcs_validator.check(reactions)
 
-        self.__post_process(reactions)
-        self.rb_method.run(reactions)
-        self.mcs_validator.check(
-            reactions,
-            override_unsolved=True,
-            override_issue_msg="Final reaction is unbalanced.",
-        )
+        # 多候选选择：若 MCS 产生多个合并候选，逐个跑后续管线，取置信度最优
+        for reaction in reactions:
+            candidates = reaction.get("mcs_candidates")
+            if candidates and len(candidates) > 1:
+                self._select_best_mcs_candidate(
+                    reaction, stats, allow_low_confidence_solved)
+            else:
+                self._run_post_mcs_pipeline(
+                    [reaction], stats, allow_low_confidence_solved)
 
-        self.conf_predictor.predict(
-            reactions,
-            stats=stats,
-            threshold=self.confidence_threshold,
-            allow_low_confidence_solved=allow_low_confidence_solved,
-        )
+        # 清理临时候选数据
+        for reaction in reactions:
+            reaction.pop("mcs_candidates", None)
+
         for reaction in reactions:
             stage_summary = reaction.setdefault("workflow_stage_summary", {})
             if stage_summary.get("core_pipeline_runs", 0) == 1 and reaction.get(self.__solved_by_col) == "mcs-based":
@@ -307,6 +320,360 @@ class Balancer:
             elif stage_summary.get("core_pipeline_runs", 0) > 1 and reaction.get(self.__solved_by_col) == "mcs-based":
                 stage_summary["second_mcs_solved"] = True
         return reactions
+
+    def _run_post_mcs_pipeline(self, reactions, stats, allow_low_confidence_solved):
+        """MCS 之后的管线步骤：后处理 → 规则修补 → 全元素复检 → XGBoost。"""
+        self.__post_process(reactions)
+        self.rb_method.run(reactions)
+        self.mcs_validator.check(
+            reactions,
+            override_unsolved=True,
+            override_issue_msg="Final reaction is unbalanced.",
+        )
+        self.conf_predictor.predict(
+            reactions,
+            stats=stats,
+            threshold=self.confidence_threshold,
+            allow_low_confidence_solved=allow_low_confidence_solved,
+        )
+
+    def _select_best_mcs_candidate(self, reaction, stats, allow_low_confidence_solved):
+        """遍历多个 MCS 合并候选，逐个跑后续管线，保留置信度最高的结果。"""
+        candidates = reaction["mcs_candidates"]
+        best_result = None
+        best_score = -1.0
+        # BA-2 修复：用临时 stats 收集最优候选的统计数据
+        best_candidate_stats = None
+
+        for result_rxn, rules, direction in candidates:
+            candidate_reaction = copy.deepcopy(reaction)
+            for col in self.mcs_method.output_col:
+                candidate_reaction[col] = result_rxn
+            candidate_reaction[self.__rules_col] = rules
+            candidate_reaction["impute_direction"] = direction
+            candidate_reaction.pop("mcs_candidates", None)
+
+            # BA-2 修复：用临时字典收集每个候选的统计，
+            # 而非传入 None 导致统计数据丢失
+            temp_stats = {}
+            self._run_post_mcs_pipeline(
+                [candidate_reaction], stats=temp_stats,
+                allow_low_confidence_solved=allow_low_confidence_solved,
+            )
+
+            confidence = candidate_reaction.get(self.__confidence_col)
+            solved = candidate_reaction.get(self.__solved_col, False)
+            # 可排序分数：有置信度用置信度值，已配平但无置信度用 0
+            # （RB 提前解决时 conf_predictor 跳过，confidence=None），
+            # 未配平不参与选择（score = -1）
+            if confidence is not None:
+                score = confidence
+            elif solved:
+                score = 0.0
+            else:
+                score = -1.0
+
+            if score > best_score:
+                best_score = score
+                best_result = candidate_reaction
+                best_candidate_stats = temp_stats
+
+        if best_result is not None:
+            # 将最优候选的状态回写到原始 reaction dict
+            for key, value in best_result.items():
+                reaction[key] = value
+            # BA-2 修复：将最优候选的统计数据合并到主 stats
+            if stats is not None and best_candidate_stats:
+                merge_stats(stats, best_candidate_stats)
+        else:
+            # 所有候选均未通过，保持第一个候选的状态（已由 mcs_method.run 设置）
+            self._run_post_mcs_pipeline(
+                [reaction], stats, allow_low_confidence_solved)
+
+    def balance_allocation(self, reactants, products, allocation,
+                           swapped=False, cached_mcs_data=None):
+        """Convert an exhaustive allocation strategy into a balanced reaction.
+
+        For each product group in the allocation, constructs an allocation
+        unit (assigned reactants -> product) and processes it through the
+        full SynRBL core pipeline: input validation, rule-based method,
+        MCS search, imputation, fragment merge, post-processing, and
+        XGBoost confidence scoring.  All allocation units are batched
+        together for efficiency.
+
+        After all units are balanced, the final reaction is assembled
+        symmetrically: missing fragments are extracted from both sides
+        of each allocation unit, and ghost reactants (assigned to the
+        empty set during enumeration) are copied to the product side.
+
+        Parameters
+        ----------
+        reactants : list[str]
+            SMILES list (as used in exhaustive allocation; may be swapped).
+        products : list[str]
+            SMILES list (as used in exhaustive allocation; may be swapped).
+        allocation : dict
+            ``best_solution`` dict from ``exhaustive_allocation_path``,
+            containing ``allocation``, ``product_groups``,
+            ``total_mcs_coverage``.
+        swapped : bool
+            Whether reactants/products were direction-swapped during
+            exhaustive allocation.
+
+        Returns
+        -------
+        dict
+            ``success`` (bool), ``balanced_reaction`` (str | None),
+            ``confidence`` (float | None), ``sub_reaction_details`` (list).
+        """
+        product_groups = allocation.get("product_groups", {})
+        k_products = len(products)
+
+        # ---- Build allocation units for each product group ----
+        sub_reactions = []
+        sub_details = []
+
+        for j in range(k_products):
+            # 兼容 int 和 string 键（JSON 反序列化可能将 int 转为 str）
+            r_indices = product_groups.get(
+                j, product_groups.get(str(j), [])
+            )
+            r_smiles_list = [reactants[i] for i in r_indices]
+
+            if not r_smiles_list:
+                # 无反应物分配到该产物：视为已平衡（产物可能来自
+                # 溶剂、催化剂等隐式试剂），跳过管线处理
+                sub_details.append({
+                    "product_idx": j,
+                    "reactant_indices": [],
+                    "sub_reaction": f">>{products[j]}",
+                    "solved": True,
+                    "confidence": 1.0,
+                    "balanced_reaction": f">>{products[j]}",
+                    "solved_by": "skipped_no_reactants",
+                })
+                continue
+
+            r_side = ".".join(r_smiles_list)
+            p_side = products[j]
+            sub_rxn = f"{r_side}>>{p_side}"
+
+            check = input_sanitize_check(sub_rxn, reaction_id=f"path_b_sub_{j}")
+            if not check["valid"]:
+                return {
+                    "success": False,
+                    "error": f"Sub-reaction {j} invalid: {check['errors']}",
+                    "balanced_reaction": None,
+                    "confidence": None,
+                    "sub_reaction_details": sub_details,
+                }
+
+            sub_reactions.append({
+                self.__reaction_col: sub_rxn,
+                self.__id_col: f"path_b_sub_{j}",
+                # BA-1 修复：保存原始产物编号，用于回写 sub_details
+                # （preprocess 后的 enumerate 索引 ≠ 原始产物编号，
+                # 因为无反应物的产物不在 sub_reactions 中）
+                "product_idx": j,
+            })
+            sub_details.append({
+                "product_idx": j,
+                "reactant_indices": list(r_indices),
+                "sub_reaction": sub_rxn,
+                "solved": False,
+                "confidence": None,
+                "balanced_reaction": None,
+            })
+
+        if not sub_reactions:
+            return {
+                "success": False,
+                "error": "No sub-reactions constructed from allocation",
+                "balanced_reaction": None,
+                "confidence": None,
+                "sub_reaction_details": sub_details,
+            }
+
+        # ---- Preprocess (standardise, neutralise, deionise, etc.) ----
+        reactions = preprocess(
+            sub_reactions,
+            self.__reaction_col,
+            self.__id_col,
+            self.__solved_col,
+            self.__input_col,
+            n_jobs=self.__n_jobs,
+            remove_aam=self.remove_aam,
+        )
+
+        if not reactions:
+            return {
+                "success": False,
+                "error": "All sub-reactions failed preprocessing",
+                "balanced_reaction": None,
+                "confidence": None,
+                "sub_reaction_details": sub_details,
+            }
+
+        # ---- Initialise per-reaction bookkeeping ----
+        for idx, r in enumerate(reactions):
+            r["_synrbl_internal_id"] = f"path_b_{idx}"
+            r["original_row_index"] = idx
+            # 保存原始 SMILES 作为 MCS 缓存键（preprocess 可能修改 reaction_col）
+            r["_mcs_cache_key"] = r[self.__reaction_col]
+            r["original_reaction"] = r[self.__reaction_col]
+            r.setdefault("workflow_stage_summary", {})["allocation_path"] = True
+            r["bridge_best_reaction"] = r[self.__reaction_col]
+            r.setdefault("cleaned_initial_reaction", r[self.__reaction_col])
+
+        # ---- Prebalance check (already atom-balanced?) ----
+        self.run_prebalance_check(reactions)
+        for r in reactions:
+            if r.get("prebalance_check", {}).get("short_circuited", False):
+                # BA-1 修复：用 product_idx 而非 original_row_index
+                idx = r["product_idx"]
+                sub_details[idx]["solved"] = True
+                sub_details[idx]["confidence"] = 1.0
+                sub_details[idx]["balanced_reaction"] = r[self.__reaction_col]
+
+        remaining = [
+            r for r in reactions
+            if not r.get("prebalance_check", {}).get("short_circuited", False)
+        ]
+
+        # ---- Core pipeline (RB + MCS + merge + post-process + XGBoost) ----
+        if remaining:
+            # 注入缓存的 MCS 数据（来自穷举排名阶段的 MCES 搜索），
+            # 避免 run_core_pipeline 重复执行三条件 MCS 搜索。
+            # 仅当所有子反应均命中缓存时才跳过 MCS 搜索；
+            # 若有任何未命中，回退到完整搜索以保证覆盖率。
+            skip_mcs = False
+            if cached_mcs_data:
+                all_hit = True
+                for r in remaining:
+                    cache_key = r.get("_mcs_cache_key")
+                    if cache_key and cache_key in cached_mcs_data:
+                        r[self.__mcs_data_col] = cached_mcs_data[cache_key]
+                    else:
+                        all_hit = False
+                if all_hit:
+                    skip_mcs = True
+
+            # M-1 修复：子反应允许低置信度保留，由编排器/ Bridge LLM 最终裁决
+            self.run_core_pipeline(
+                remaining,
+                allow_low_confidence_solved=True,
+                skip_mcs=skip_mcs,
+            )
+            for r in remaining:
+                # BA-1 修复：用 product_idx 而非 original_row_index
+                idx = r["product_idx"]
+                sub_details[idx]["solved"] = r.get(self.__solved_col, False)
+                sub_details[idx]["confidence"] = r.get(self.__confidence_col)
+                sub_details[idx]["balanced_reaction"] = r[self.__reaction_col]
+                sub_details[idx]["solved_by"] = r.get(self.__solved_by_col, "")
+
+        # ---- Verify all sub-reactions solved ----
+        if not all(d["solved"] for d in sub_details):
+            failed = [d for d in sub_details if not d["solved"]]
+            return {
+                "success": False,
+                "error": (
+                    f"{len(failed)} allocation unit(s) failed to balance"
+                ),
+                "balanced_reaction": None,
+                "confidence": None,
+                "sub_reaction_details": sub_details,
+            }
+
+        # ---- Collect generated (missing) fragments — symmetric ----
+        # 对每个分配单元，同时检查反应物侧和产物侧的新增碎片
+        missing_reactant_parts = []
+        missing_product_parts = []
+        for detail in sub_details:
+            bal_rxn = detail.get("balanced_reaction", "")
+            if not bal_rxn or ">>" not in bal_rxn:
+                continue
+            bal_lhs, bal_rhs = bal_rxn.split(">>", 1)
+            orig_lhs, orig_rhs = detail["sub_reaction"].split(">>", 1)
+
+            # 产物侧：配平后多出来的碎片 → 加到总方程式右侧
+            orig_p_set = set(
+                p for p in orig_rhs.split(".") if p
+            )
+            for part in bal_rhs.split("."):
+                if part and part not in orig_p_set:
+                    missing_product_parts.append(part)
+
+            # 反应物侧：配平后多出来的碎片 → 加到总方程式左侧
+            orig_r_set = set(
+                r for r in orig_lhs.split(".") if r
+            )
+            for part in bal_lhs.split("."):
+                if part and part not in orig_r_set:
+                    missing_reactant_parts.append(part)
+
+        # ---- Ghost reactants: assigned to empty set (no product group) ----
+        # 这些反应物不参与任何分配单元，复制到产物侧使左右抵消
+        allocated_indices = set()
+        for j in range(k_products):
+            r_indices = product_groups.get(
+                j, product_groups.get(str(j), [])
+            )
+            allocated_indices.update(r_indices)
+        ghost_reactants = [
+            reactants[i]
+            for i in range(len(reactants))
+            if i not in allocated_indices and reactants[i]
+        ]
+
+        # ---- Assemble the final balanced reaction ----
+        all_lhs = [sm for sm in reactants if sm] + missing_reactant_parts
+        all_rhs = (
+            [sm for sm in products if sm]
+            + missing_product_parts
+            + ghost_reactants
+        )
+        balanced = ">>".join([".".join(all_lhs), ".".join(all_rhs)])
+
+        # ---- Un-swap if needed ----
+        if swapped:
+            balanced = ">>".join(
+                [".".join(all_rhs), ".".join(all_lhs)]
+            )
+
+        # ---- Overall confidence = minimum across allocation units ----
+        confidences = [
+            d["confidence"] for d in sub_details
+            if d["confidence"] is not None
+        ]
+        overall_confidence = min(confidences) if confidences else None
+
+        total_missing = (
+            len(missing_reactant_parts)
+            + len(missing_product_parts)
+            + len(ghost_reactants)
+        )
+        logger.info(
+            "Path B balance: %d allocation units, confidence=%.4f, "
+            "missing_reactant=%d, missing_product=%d, ghost=%d, "
+            "balanced=%s",
+            len(sub_details),
+            overall_confidence or 0.0,
+            len(missing_reactant_parts),
+            len(missing_product_parts),
+            len(ghost_reactants),
+            balanced,
+        )
+
+        return {
+            "success": True,
+            "balanced_reaction": balanced,
+            "confidence": overall_confidence,
+            "sub_reaction_details": sub_details,
+            "ghost_reactants": ghost_reactants,
+            "missing_reactant_parts": missing_reactant_parts,
+            "missing_product_parts": missing_product_parts,
+        }
 
     def run_post_generation_pipeline(self, reactions, stats=None):
         for reaction in reactions:
@@ -332,8 +699,45 @@ class Balancer:
         if stats is not None:
             stats["raw_input_cnt"] = len(reactions)
 
+        # === 步骤 0: 输入验证（input_sanitize_check）===
+        valid_reactions = []
+        for reaction in reactions:
+            rxn_smiles = reaction.get(self.__reaction_col, "")
+            if rxn_smiles is None:
+                rxn_smiles = ""
+            rxn_id = reaction.get(self.__id_col, "")
+            check_result = input_sanitize_check(
+                str(rxn_smiles), reaction_id=str(rxn_id)
+            )
+            if check_result["valid"]:
+                valid_reactions.append(reaction)
+            else:
+                reaction["processable"] = False
+                reaction["preprocess_status"] = "invalid_smiles"
+                reaction["issue"] = "; ".join(check_result["errors"])
+                stage_summary = reaction.setdefault(
+                    "workflow_stage_summary", {}
+                )
+                stage_summary["input_sanitize"] = {
+                    "valid": False,
+                    "errors": check_result["errors"],
+                }
+
+        if stats is not None:
+            stats["post_input_sanitize_cnt"] = len(valid_reactions)
+            stats["input_sanitize_invalid_cnt"] = (
+                len(reactions) - len(valid_reactions)
+            )
+
+        # 保存未通过验证的反应，稍后追加回结果列表
+        invalid_reactions = [
+            r for r in reactions if not r.get("processable", True)
+        ]
+        total_input_cnt = len(reactions)
+
+        # 仅对通过输入验证的反应执行 preprocess 及后续流程
         reactions = preprocess(
-            reactions,
+            valid_reactions,
             self.__reaction_col,
             self.__id_col,
             self.__solved_col,
@@ -373,7 +777,20 @@ class Balancer:
         if self.llm_fallback_postprocessor is not None and remaining_reactions:
             self.llm_fallback_postprocessor.apply(remaining_reactions, self, stats=stats)
 
-        assert rxn_cnt == len(reactions)
+        if rxn_cnt != len(reactions):
+            raise RuntimeError(
+                "Reaction count changed during pipeline: {} -> {}".format(
+                    rxn_cnt, len(reactions))
+            )
+
+        # 将未通过输入验证的反应追加回结果列表
+        reactions.extend(invalid_reactions)
+        if total_input_cnt != len(reactions):
+            raise RuntimeError(
+                "Reaction count changed after appending invalid: {} -> {}".format(
+                    total_input_cnt, len(reactions))
+            )
+
         logger.info("DONE")
 
         return reactions

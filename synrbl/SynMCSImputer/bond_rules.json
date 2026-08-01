@@ -1,0 +1,58 @@
+{
+    "restrictions": {
+        "forbidden_pairs": [
+            {
+                "elements": [
+                    "F",
+                    "F"
+                ],
+                "reason": "氟原子间不直接成键"
+            },
+            {
+                "elements": [
+                    "Cl",
+                    "Cl"
+                ],
+                "reason": "氯原子间通常不直接成键"
+            }
+        ],
+        "forbidden_bond_types": [
+            {
+                "elements": [
+                    "C",
+                    "O"
+                ],
+                "bond_type": "TRIPLE",
+                "reason": "碳氧叁键在有机反应里极不常见"
+            },
+            {
+                "elements": [
+                    "N",
+                    "N"
+                ],
+                "bond_type": "TRIPLE",
+                "reason": "氮氮叁键仅在特定结构中存在"
+            }
+        ]
+    },
+    "heuristics": {
+        "default_bond_types": {
+            "C(1)-C(1)": "SINGLE",
+            "C(2)-C(2)": "DOUBLE",
+            "C(3)-C(3)": "TRIPLE",
+            "C(1)-O(1)": "SINGLE",
+            "C(2)-O(2)": "DOUBLE",
+            "C(1)-N(1)": "SINGLE",
+            "C(2)-N(2)": "DOUBLE",
+            "C(1)-S(1)": "SINGLE",
+            "H(1)-O(1)": "SINGLE",
+            "H(1)-N(1)": "SINGLE",
+            "C-C": "SINGLE",
+            "C-O": "SINGLE",
+            "C-N": "SINGLE",
+            "C-S": "SINGLE",
+            "H-O": "SINGLE",
+            "H-N": "SINGLE"
+        }
+    }
+}

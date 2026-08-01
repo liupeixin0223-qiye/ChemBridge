@@ -241,7 +241,7 @@ class ReplaceAction(Action):
 
     def apply(self, boundary: Boundary):
         smiles = boundary.compound.smiles
-        smiles.replace(self.pattern, self.value)
+        smiles = smiles.replace(self.pattern, self.value)
         mol = rdmolfiles.MolFromSmiles(smiles)
         new_symbol = mol.GetAtomWithIdx(boundary.index).GetSymbol()
         if boundary.symbol != new_symbol:
@@ -764,7 +764,15 @@ class MergeRule:
         )
 
         mol = merge_result["mol"]
-        rdmolops.SanitizeMol(mol)
+        try:
+            rdmolops.SanitizeMol(mol)
+        except Exception as e:
+            logger.warning(
+                "MergeRule '%s' produced invalid molecule "
+                "(SanitizeMol failed): %s",
+                self.name, str(e),
+            )
+            return None
 
         boundary1.compound.update(mol, boundary1)
         boundary1.compound.rules.extend(boundary2.compound.rules)
@@ -790,11 +798,22 @@ class ExpandRule:
 
     _expand_rules: list[ExpandRule] | None = None
 
-    def __init__(self, name="unnamed", condition={}, compound=None, **kwargs):
+    def __init__(self, name="unnamed", condition={}, compound=None,
+                 valence=None, multi_site=False,
+                 type="expand", intermediate_atom=None,
+                 intermediate_smiles=None, priority=0,
+                 description="", **kwargs):
         _check_config(ExpandRule, **kwargs)
         self.name = kwargs.get("name", name)
+        self.rule_type = type
         self.condition = BoundaryCondition(**kwargs.get("condition", condition))
         self.compound = kwargs.get("compound", compound)
+        self.valence = valence
+        self.multi_site = multi_site
+        self.intermediate_atom = intermediate_atom
+        self.intermediate_smiles = intermediate_smiles
+        self.priority = priority
+        self.description = description
 
     @classmethod
     def get_all(cls) -> list[ExpandRule]:
@@ -828,6 +847,8 @@ class ExpandRule:
         Returns:
             bool: True if the compound rule can be applied, false otherwise.
         """
+        if self.rule_type == "bridge":
+            return False
         return self.condition(boundary)
 
     def apply(self) -> Compound:
@@ -904,3 +925,201 @@ def get_expand_rules() -> list[ExpandRule]:
 
 def get_compound_rules() -> list[CompoundRule]:
     return CompoundRule.get_all()
+
+
+# ======================================================================
+# 改进 6b：三层合并规则引擎
+# ======================================================================
+from dataclasses import dataclass as _dataclass
+
+
+@_dataclass
+class BondTypeDecision:
+    """化学键类型决策结果。"""
+    bond_type: str           # "SINGLE", "DOUBLE", "TRIPLE", "AROMATIC", "NONE"
+    decision_layer: str      # 决策来源: "restriction", "radical", "heuristic"
+
+
+class ThreeLayerBondRuleEngine:
+    """三层合并规则引擎，用于确定碎片间化学键类型。
+
+    三层优先级：
+        1. 限制规则（Restriction Rules）— 排除化学上不合理的键合方案
+        2. 自由基匹配（Radical Matching）— 利用 radical_electrons 确定键型
+        3. 启发式兜底（Heuristic Fallback）— 基于元素类型的通用规则
+    """
+
+    def __init__(self, rules_file: str = "bond_rules.json"):
+        self.rules = self._load_rules(rules_file)
+        self.restrictions = self.rules.get("restrictions", {})
+        self.heuristics = self.rules.get("heuristics", {})
+
+    def _load_rules(self, rules_file: str) -> dict:
+        # 尝试使用 importlib.resources 定位包内的 bond_rules.json
+        try:
+            import importlib.resources as _res
+            import synrbl.SynMCSImputer as _pkg
+            ref = _res.files(_pkg).joinpath("bond_rules.json")
+            with _res.as_file(ref) as path:
+                with open(path, "r", encoding="utf-8") as f:
+                    raw = json.load(f)
+            # 处理格式：如果原始文件是列表格式，转换为字典格式
+            if isinstance(raw, list):
+                return self._default_rules()
+            return raw
+        except Exception:
+            pass
+        # 回退：尝试直接打开指定路径
+        try:
+            with open(rules_file, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+            if isinstance(raw, list):
+                return self._default_rules()
+            return raw
+        except (FileNotFoundError, json.JSONDecodeError):
+            return self._default_rules()
+
+    @staticmethod
+    def _default_rules() -> dict:
+        return {
+            "restrictions": {
+                "forbidden_pairs": [
+                    {"elements": ["F", "F"],
+                     "reason": "氟原子间不直接成键"},
+                    {"elements": ["Cl", "Cl"],
+                     "reason": "氯原子间通常不直接成键"},
+                ],
+                "forbidden_bond_types": [
+                    {"elements": ["C", "O"], "bond_type": "TRIPLE",
+                     "reason": "碳氧叁键在有机反应里极不常见"},
+                    {"elements": ["N", "N"], "bond_type": "TRIPLE",
+                     "reason": "氮氮叁键仅在特定结构中存在"},
+                ],
+            },
+            "heuristics": {
+                "default_bond_types": {
+                    "C(1)-C(1)": "SINGLE",
+                    "C(2)-C(2)": "DOUBLE",
+                    "C(3)-C(3)": "TRIPLE",
+                    "C(1)-O(1)": "SINGLE",
+                    "C(2)-O(2)": "DOUBLE",
+                    "C(1)-N(1)": "SINGLE",
+                    "C(2)-N(2)": "DOUBLE",
+                    "C(1)-S(1)": "SINGLE",
+                    "H(1)-O(1)": "SINGLE",
+                    "H(1)-N(1)": "SINGLE",
+                    "C-C": "SINGLE", "C-O": "SINGLE",
+                    "C-N": "SINGLE", "C-S": "SINGLE",
+                    "H-O": "SINGLE", "H-N": "SINGLE",
+                },
+            },
+        }
+
+    def determine_bond_type(
+        self,
+        atom1_element: str,
+        atom1_radical_electrons: int,
+        atom2_element: str,
+        atom2_radical_electrons: int,
+    ) -> BondTypeDecision:
+        """确定两个边界原子之间的化学键类型。
+        按三层优先级依次判断：限制规则 → 自由基匹配 → 启发式兜底。
+        """
+        elem_pair = tuple(sorted([atom1_element, atom2_element]))
+
+        # ========== 第一层：限制规则 ==========
+        for forbidden in self.restrictions.get("forbidden_pairs", []):
+            forbidden_pair = tuple(sorted(forbidden["elements"]))
+            if elem_pair == forbidden_pair:
+                return BondTypeDecision(
+                    bond_type="NONE",
+                    decision_layer="restriction",
+                )
+
+        # 根据自由基电子数推断初步键型
+        min_radical = min(atom1_radical_electrons, atom2_radical_electrons)
+        max_radical = max(atom1_radical_electrons, atom2_radical_electrons)
+
+        if min_radical == 1 and max_radical == 1:
+            preliminary_bond = "SINGLE"
+        elif min_radical == 2 and max_radical == 2:
+            preliminary_bond = "DOUBLE"
+        elif min_radical == 3 and max_radical == 3:
+            preliminary_bond = "TRIPLE"
+        else:
+            preliminary_bond = None
+
+        if preliminary_bond:
+            for forbidden_bt in self.restrictions.get(
+                "forbidden_bond_types", []
+            ):
+                fb_pair = tuple(sorted(forbidden_bt["elements"]))
+                if (
+                    elem_pair == fb_pair
+                    and preliminary_bond == forbidden_bt["bond_type"]
+                ):
+                    return BondTypeDecision(
+                        bond_type="SINGLE",
+                        decision_layer="restriction",
+                    )
+
+        # ========== 第二层：自由基匹配 ==========
+        if preliminary_bond:
+            return BondTypeDecision(
+                bond_type=preliminary_bond,
+                decision_layer="radical",
+            )
+
+        # 处理自由基数不匹配的情况
+        if atom1_radical_electrons > 0 and atom2_radical_electrons > 0:
+            bond_order = min(atom1_radical_electrons, atom2_radical_electrons)
+            bond_type_map = {1: "SINGLE", 2: "DOUBLE", 3: "TRIPLE"}
+            partial_bond = bond_type_map.get(bond_order, "SINGLE")
+
+            # 禁止键型检查（与等自由基情况相同的限制规则）
+            for forbidden_bt in self.restrictions.get(
+                "forbidden_bond_types", []
+            ):
+                fb_pair = tuple(sorted(forbidden_bt["elements"]))
+                if (
+                    elem_pair == fb_pair
+                    and partial_bond == forbidden_bt["bond_type"]
+                ):
+                    return BondTypeDecision(
+                        bond_type="SINGLE",
+                        decision_layer="restriction",
+                    )
+
+            return BondTypeDecision(
+                bond_type=partial_bond,
+                decision_layer="radical",
+            )
+
+        # ========== 第三层：启发式兜底 ==========
+        bond_types_db = self.heuristics.get("default_bond_types", {})
+
+        # 优先使用含自由基信息的键（如 "C(1)-O(1)"）
+        if atom1_radical_electrons > 0 and atom2_radical_electrons > 0:
+            radical_key = (
+                f"{elem_pair[0]}({min(atom1_radical_electrons, atom2_radical_electrons)})"
+                f"-{elem_pair[1]}({max(atom1_radical_electrons, atom2_radical_electrons)})"
+            )
+            default_bond = bond_types_db.get(radical_key)
+        else:
+            default_bond = None
+
+        # 回退到仅元素组成的键（如 "C-O"）
+        if default_bond is None:
+            elem_key = f"{elem_pair[0]}-{elem_pair[1]}"
+            default_bond = bond_types_db.get(elem_key)
+
+        if default_bond:
+            return BondTypeDecision(
+                bond_type=default_bond,
+                decision_layer="heuristic",
+            )
+
+        return BondTypeDecision(
+            bond_type="SINGLE",
+            decision_layer="heuristic",
+        )

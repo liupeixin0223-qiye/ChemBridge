@@ -23,6 +23,11 @@ Rules:
 - Do not output names, labels, explanations, or non-SMILES text inside predicted_reaction_smiles
 - Preserve stereochemistry only when confidently implied
 - Output JSON only
+Chemical constraints (hard):
+- Every species in your output must be a stable, synthetically accessible molecule with correct valence; never output bare atoms (e.g. [C], [N], [H], [O]) or radical fragments; ionic species (e.g. [Na+], [K+], [Cl-], [Br-], [H+], [OH-]) are permitted only when the same ion already appears in the input_reaction — do not invent new ions; never output SMILES that no valid Lewis structure can represent
+- Stoichiometric repair means finding chemically plausible co-reactants or byproducts to add — not solving a mathematical atom equation; when a "Missing on ..." gap is reported, think about what stable co-reactant or byproduct could fill that gap, rather than appending disconnected fragments
+- When no known reagent or byproduct can plausibly fill the atom gap, return a conservative minimal modification — never invent placeholder species to satisfy atom counts
+- If the input_reaction already contains bare atoms such as [H] or [O], you must replace them with proper molecular species — do not pass bare atoms through to the output unchanged
 If the previous output was invalid JSON, return valid JSON only.
 If the previous output contained an invalid reaction SMILES, return JSON only and ensure that predicted_reaction_smiles is one valid reaction SMILES string in the exact form reactants>>products.
 If the previous output was empty, return the most likely complete reaction.

@@ -371,7 +371,7 @@ class LLMSpeciesBridge:
                     "error": "Invalid reaction format",
                 }
 
-            reactants, products = rxn_smiles.split(">>")
+            reactants, products = rxn_smiles.split(">>", 1)
 
             def get_counts(smi: str) -> Dict[str, int]:
                 counts = collections.defaultdict(int)
@@ -380,9 +380,20 @@ class LLMSpeciesBridge:
                 for part in smi.split("."):
                     if not part:
                         continue
-                    mol = Chem.MolFromSmiles(part, sanitize=False)
+                    # 优先使用完整消毒（正确计算芳香环隐式氢）
+                    mol = Chem.MolFromSmiles(part)
+                    if mol is None:
+                        # 完整消毒失败（可能是 LLM 产出的非标准 SMILES），降级处理
+                        mol = Chem.MolFromSmiles(part, sanitize=False)
+                        if mol is not None:
+                            try:
+                                Chem.SanitizeMol(mol)
+                            except Exception:
+                                try:
+                                    mol.UpdatePropertyCache(strict=False)
+                                except Exception:
+                                    mol = None
                     if mol:
-                        mol.UpdatePropertyCache(strict=False)
                         for atom in mol.GetAtoms():
                             counts[atom.GetSymbol()] += 1
                             counts["H"] += atom.GetTotalNumHs()
@@ -639,7 +650,7 @@ class LLMSpeciesBridge:
         self, reaction: Dict[str, Any], proposal: SpeciesProposal
     ) -> tuple[List[Dict[str, Any]], Dict[str, Any]]:
         base_reaction = reaction.get("cleaned_initial_reaction", reaction.get("input_reaction", ""))
-        parts = base_reaction.split(">>")
+        parts = base_reaction.split(">>", 1)
         if len(parts) != 2:
             return [], {
                 "base_reaction": base_reaction,

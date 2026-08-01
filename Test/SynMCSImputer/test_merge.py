@@ -167,7 +167,7 @@ class TestCompounds(unittest.TestCase):
         cset = CompoundSet()
         compound = cset.add_compound("C", src_mol="COc1ccccc1")
         compound.add_boundary(0, neighbor_index=1, neighbor_symbol="O")
-        merged = merge.merge(cset)
+        merged = merge.merge(cset)[0]
         self.assertEqual("CI", merged.smiles)
 
     def test_2(self):
@@ -176,7 +176,7 @@ class TestCompounds(unittest.TestCase):
         cset = CompoundSet()
         compound = cset.add_compound("C", src_mol="CSc1ccccc1")
         compound.add_boundary(0, neighbor_index=1, neighbor_symbol="S")
-        merged = merge.merge(cset)
+        merged = merge.merge(cset)[0]
         self.assertEqual("CI", merged.smiles)
 
     def test_3(self):
@@ -187,7 +187,7 @@ class TestCompounds(unittest.TestCase):
             "CC(C)(C)", src_mol="OC(=O)CONC(=O)NCc1cccc2ccccc12"
         )
         compound.add_boundary(1, neighbor_index=4, neighbor_symbol="O")
-        merged = merge.merge(cset)
+        merged = merge.merge(cset)[0]
         self.assertEqual("CC(C)(C)O", merged.smiles)
 
     def test_4(self):
@@ -198,7 +198,7 @@ class TestCompounds(unittest.TestCase):
             "CC(C)(C)", src_mol="OC(=O)CONC(=O)NCc1cccc2ccccc12"
         )
         compound.add_boundary(1, neighbor_index=4, neighbor_symbol="O")
-        merged = merge.merge(cset)
+        merged = merge.merge(cset)[0]
         self.assertEqual("CC(C)(C)O", merged.smiles)
 
     def test_thioether_break(self):
@@ -208,7 +208,7 @@ class TestCompounds(unittest.TestCase):
         cset = CompoundSet()
         compound = cset.add_compound("C", src_mol="CCSC")
         compound.add_boundary(0, symbol="C", neighbor_index=2, neighbor_symbol="S")
-        merged = merge.merge(cset)
+        merged = merge.merge(cset)[0]
         self.assertIn("C-S Thioether break", [r.name for r in merged.rules])
         self.assertEqual("CI", merged.smiles)
 
@@ -220,7 +220,7 @@ class TestCompounds(unittest.TestCase):
             "CC=O", src_mol="CC(=O)SCC(C)C(=O)N(CC(=O)O)C1CCC1"
         )
         compound.add_boundary(1, symbol="C", neighbor_index=3, neighbor_symbol="S")
-        merged = merge.merge(cset)
+        merged = merge.merge(cset)[0]
         self.assertIn("C-S Thioester break", [r.name for r in merged.rules])
         self.assertEqual("CC(=O)O", merged.smiles)
 
@@ -229,7 +229,7 @@ class TestCompounds(unittest.TestCase):
         cset = CompoundSet()
         compound = cset.add_compound(s, src_mol="C[SH](C)(C)=O")
         compound.add_boundary(1, neighbor_index=0)
-        cm = merge.merge(cset)
+        cm = merge.merge(cset)[0]
         self.assertEqual(s, cm.smiles)
         self.assertEqual(0, len(cm.boundaries))
 
@@ -239,7 +239,7 @@ class TestCompounds(unittest.TestCase):
         compound1.add_boundary(1, symbol="N", neighbor_index=4, neighbor_symbol="C")
         compound2 = cset.add_compound("[MgH+]", src_mol="C[Mg+]")
         compound2.add_boundary(0, symbol="Mg", neighbor_index=0, neighbor_symbol="C")
-        cm = merge.merge(cset)
+        cm = merge.merge(cset)[0]
         self.assertEqual("CO[N](C)[Mg+]", cm.smiles)
 
     def test_merge_with_explicit_H_1(self):
@@ -248,7 +248,7 @@ class TestCompounds(unittest.TestCase):
             "C[SH](=O)=O", src_mol="CS(=O)(=O)Oc1ccc(C(=N)N)cc1C(=O)c1ccccc1"
         )
         compound.add_boundary(1, symbol="S", neighbor_index=4, neighbor_symbol="O")
-        cm = merge.merge(cset)
+        cm = merge.merge(cset)[0]
         self.assertEqual("CS(=O)(=O)O", cm.smiles)
 
     def test_merge_P_with_explicit_H(self):
@@ -259,7 +259,7 @@ class TestCompounds(unittest.TestCase):
         compound1.add_boundary(3, symbol="P", neighbor_index=5, neighbor_symbol="C")
         compound2 = cset.add_compound("O", src_mol="CC(C)=O")
         compound2.add_boundary(0, symbol="O", neighbor_index=1, neighbor_symbol="C")
-        cm = merge.merge(cset)
+        cm = merge.merge(cset)[0]
         self.assertEqual("CCOP(=O)(O)OCC", cm.smiles)
 
     def test_O_forms_alcohol(self):
@@ -268,7 +268,7 @@ class TestCompounds(unittest.TestCase):
         compound1.add_boundary(0, symbol="C")
         compound2 = cset.add_compound("O", src_mol="O")
         compound2.add_boundary(0, symbol="O")
-        cm = merge.merge(cset)
+        cm = merge.merge(cset)[0]
         self.assertEqual("CO", cm.smiles)
 
     def test_5(self):
@@ -278,7 +278,7 @@ class TestCompounds(unittest.TestCase):
         compound1.add_boundary(0, symbol="C", neighbor_index=2, neighbor_symbol="C")
         compound1.add_boundary(1, symbol="C", neighbor_index=9, neighbor_symbol="C")
         compound1.add_boundary(3, symbol="C", neighbor_index=8, neighbor_symbol="O")
-        cm = merge.merge(cset)
+        cm = merge.merge(cset)[0]
         self.assertEqual("OCC(O)CC(O)O", cm.smiles)
 
     def test_merge_expansion_of_two_compounds_with_unequal_nr_of_bonds(self):
@@ -292,7 +292,7 @@ class TestCompounds(unittest.TestCase):
         compound2.add_boundary(8, symbol="C", neighbor_index=2, neighbor_symbol="N")
         compound1.rules = ["r1"]
         compound2.rules = ["r2"]
-        cm = merge.merge(cset)
+        cm = merge.merge(cset)[0]
         self.assertEqual("Cl.O=C(O)c1ccccc1C(=O)O", cm.smiles)
         self.assertIn("r1", cm.rules)
         self.assertIn("r2", cm.rules)
@@ -303,7 +303,7 @@ class TestCompounds(unittest.TestCase):
         compound2 = cset.add_compound("N", src_mol="N#CC1CC1")
         compound1.add_boundary(0, symbol="Br", neighbor_index=7, neighbor_symbol="C")
         compound2.add_boundary(0, symbol="N", neighbor_index=1, neighbor_symbol="C")
-        cm = merge.merge(cset)
+        cm = merge.merge(cset)[0]
         self.assertEqual("Br.N", cm.smiles)
 
     def test_ignore_water_in_passthrough(self):
@@ -313,13 +313,13 @@ class TestCompounds(unittest.TestCase):
         compound2 = cset.add_compound("O", src_mol="O")
         compound2.add_boundary(0, symbol="O")
         cset.add_compound("O", src_mol="O")
-        cm = merge.merge(cset)
+        cm = merge.merge(cset)[0]
         self.assertEqual("remove_water_catalyst", cm.rules[0].name)
         self.assertEqual("CO", cm.smiles)
 
     def test_catalyst_passthrough(self):
         cset = CompoundSet()
         cset.add_compound("C", src_mol="C")
-        cm = merge.merge(cset)
+        cm = merge.merge(cset)[0]
         self.assertEqual(0, len(cm.rules))
         self.assertEqual("C", cm.smiles)

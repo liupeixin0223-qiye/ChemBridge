@@ -79,11 +79,13 @@ class FindMissingGraphs:
         missing_parts_list = []
         boundary_atoms_lists = []
         nearest_neighbor_lists = []
+        radical_sites_list = []
 
         for mol, mcs_mol in zip(mol_list, mcs_list):
             atoms_to_remove = set()
             boundary_atoms_list = []
             nearest_neighbor_list = []
+            radical_sites = []
 
             if mcs_mol.GetNumAtoms() > 0:
                 # Finding substructure matches
@@ -133,9 +135,34 @@ class FindMissingGraphs:
                             missing_part_smiles
                         )
 
+                    # === 自由基保留：在氢封顶前保存原始自由基信息 ===
+                    pre_cap_radical_info = {}
+                    if missing_part is not None:
+                        # 为每个原子标记当前索引，供封顶后回溯
+                        for atom in missing_part.GetAtoms():
+                            atom.SetIntProp("_pre_cap_idx", atom.GetIdx())
+                        for atom in missing_part.GetAtoms():
+                            nre = atom.GetNumRadicalElectrons()
+                            if nre > 0:
+                                pre_cap_radical_info[atom.GetIdx()] = nre
+
                     missing_part = MoleculeCurator.add_hydrogens_to_radicals(
                         missing_part
                     )
+
+                    # 将封顶前的自由基信息映射到封顶后的原子索引
+                    if missing_part is not None and pre_cap_radical_info:
+                        for atom in missing_part.GetAtoms():
+                            if atom.HasProp("_pre_cap_idx"):
+                                orig_idx = atom.GetIntProp("_pre_cap_idx")
+                                if orig_idx in pre_cap_radical_info:
+                                    radical_sites.append({
+                                        "atom_idx": atom.GetIdx(),
+                                        "original_atom_idx": orig_idx,
+                                        "num_radical_electrons": (
+                                            pre_cap_radical_info[orig_idx]
+                                        ),
+                                    })
                     atom_mapping = FindMissingGraphs.map_parent_to_child(
                         missing_part_old, missing_part, left_number
                     )
@@ -161,8 +188,6 @@ class FindMissingGraphs:
                         # and nearest neighbors
                         for neighbor in neighbors:
                             if neighbor.GetIdx() not in substructure_match:
-                                nearest_atoms.append({atom_symbol: atom_idx})
-
                                 if missing_part:
                                     renumerate_idx = atom_mapping.get(
                                         neighbor.GetIdx(), -1
@@ -172,6 +197,7 @@ class FindMissingGraphs:
                                         neighbor.GetIdx(), -1
                                     )
                                 if renumerate_idx != -1:
+                                    nearest_atoms.append({atom_symbol: atom_idx})
                                     boundary_atoms.append(
                                         {neighbor.GetSymbol(): renumerate_idx}
                                     )
@@ -191,17 +217,25 @@ class FindMissingGraphs:
                     missing_parts_list.append(missing_part)
                     boundary_atoms_lists.extend(boundary_atoms_list)
                     nearest_neighbor_lists.extend(nearest_neighbor_list)
+                    radical_sites_list.append(radical_sites)
                 else:
                     missing_parts_list.append(None)
                     boundary_atoms_lists.append(None)
                     nearest_neighbor_lists.append(None)
+                    radical_sites_list.append([])
             except Exception:
                 missing_parts_list.append(None)
                 boundary_atoms_lists.append(None)
                 nearest_neighbor_lists.append(None)
+                radical_sites_list.append([])
 
         del block
-        return missing_parts_list, boundary_atoms_lists, nearest_neighbor_lists
+        return (
+            missing_parts_list,
+            boundary_atoms_lists,
+            nearest_neighbor_lists,
+            radical_sites_list,
+        )
 
     @staticmethod
     def map_parent_to_child(parent_mol, child_mol, key_base):

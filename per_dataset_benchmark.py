@@ -4,7 +4,7 @@ import collections
 import ast
 import pandas as pd
 
-src_file = "./Data/Validation_set/validation_set.csv"
+src_file = "./Data/Validation_set/validation_set_fixed.csv"
 dataset = pd.read_csv(src_file).to_dict("records")
 db_splits = collections.defaultdict(lambda: [])
 

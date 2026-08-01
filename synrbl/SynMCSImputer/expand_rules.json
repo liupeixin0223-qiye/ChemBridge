@@ -6,7 +6,9 @@
             "neighbor_atom": ["O"],
             "functional_group": ["ether"]
         },
-        "compound": {"smiles": "I", "index": 0}
+        "compound": {"smiles": "I", "index": 0},
+        "valence": 1,
+        "multi_site": false
     },
     {
         "name": "C-S Thioether break",
@@ -15,7 +17,9 @@
             "neighbor_atom": ["S"],
             "functional_group": ["thioether"]
         },
-        "compound": {"smiles": "I", "index": 0}
+        "compound": {"smiles": "I", "index": 0},
+        "valence": 1,
+        "multi_site": false
     },
     {
         "name": "C-O Ester break",
@@ -24,7 +28,9 @@
             "neighbor_atom": ["O"],
             "functional_group": ["ester"]
         },
-        "compound": {"smiles": "O", "index": 0}
+        "compound": {"smiles": "O", "index": 0},
+        "valence": 2,
+        "multi_site": true
     },
     {
         "name": "C-S Thioester break",
@@ -33,32 +39,82 @@
             "neighbor_atom": ["S"],
             "functional_group": ["thioester"]
         },
-        "compound": {"smiles": "O", "index": 0}
+        "compound": {"smiles": "O", "index": 0},
+        "valence": 2,
+        "multi_site": true
     },
-	{
-		"name": "C-N Amide break",
-		"condition": {
-			"atom": ["C"],
-			"neighbor_atom": ["N"],
-			"functional_group": ["amid"]
-		},
-		"compound": {"smiles": "O", "index": 0}
-	},
-	{
-		"name": "form M-OH",
-		"condition": {
-			"atom": ["Mg", "Zn", "Si", "B"]
-		},
-		"compound": {"smiles": "O", "index": 0}
-	},
+    {
+        "name": "C-N Amide break",
+        "condition": {
+            "atom": ["C"],
+            "neighbor_atom": ["N"],
+            "functional_group": ["amid"]
+        },
+        "compound": {"smiles": "O", "index": 0},
+        "valence": 2,
+        "multi_site": true
+    },
+    {
+        "name": "form M-OH",
+        "condition": {
+            "atom": ["Mg", "Zn", "Si", "B"]
+        },
+        "compound": {"smiles": "O", "index": 0},
+        "valence": 2,
+        "multi_site": false
+    },
     {
         "name": "append O when next to O or N",
         "condition": {"atom": ["!O", "!N"], "neighbor_atom": ["O", "N"]},
-        "compound": {"smiles": "O", "index": 0}
+        "compound": {"smiles": "O", "index": 0},
+        "valence": 2,
+        "multi_site": true
     },
     {
         "name": "append O to C-C bond",
         "condition": {"atom": ["C"], "neighbor_atom": ["C"]},
-        "compound": {"smiles": "O", "index": 0}
+        "compound": {"smiles": "O", "index": 0},
+        "valence": 2,
+        "multi_site": true
+    },
+    {
+        "name": "bridge_O",
+        "type": "bridge",
+        "intermediate_atom": "O",
+        "intermediate_smiles": "[O]",
+        "valence": 2,
+        "multi_site": true,
+        "priority": 1,
+        "description": "insert O bridge atom (ether/ester linkage)"
+    },
+    {
+        "name": "bridge_S",
+        "type": "bridge",
+        "intermediate_atom": "S",
+        "intermediate_smiles": "[S]",
+        "valence": 2,
+        "multi_site": true,
+        "priority": 2,
+        "description": "insert S bridge atom (thioether linkage)"
+    },
+    {
+        "name": "bridge_N",
+        "type": "bridge",
+        "intermediate_atom": "N",
+        "intermediate_smiles": "[NH]",
+        "valence": 3,
+        "multi_site": true,
+        "priority": 3,
+        "description": "insert N bridge atom (amine linkage)"
+    },
+    {
+        "name": "bridge_C",
+        "type": "bridge",
+        "intermediate_atom": "C",
+        "intermediate_smiles": "[CH2]",
+        "valence": 2,
+        "multi_site": true,
+        "priority": 4,
+        "description": "insert C bridge atom (methylene chain extension)"
     }
 ]
